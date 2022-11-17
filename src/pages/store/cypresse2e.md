@@ -11,4 +11,4 @@ checkoutUrl: "https://www.udemy.com/course/the-complete-cypress-10-e2e-course/"
 heroImage: "https://img-b.udemycdn.com/course/240x135/4329826_f876_7.jpg"
 ---
 
-Information
+Write Automated UI & API test scripts using JavaScript or TypeScript(E2E Testing Type)
