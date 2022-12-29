@@ -204,9 +204,13 @@ An RCA is a mechanism of analyzing defects to identify its cause:
 
 Integration testing has different approaches, but there are a couple of them that implies stubs and drivers:
 #### Top-down Integration Testing
-Testing takes place from top to bottom, following the control flow or architectural structure (e.g. starting from the GUI or main menu). Components or systems are substituted by stubs.
+Testing takes place from top to bottom, following the control flow or architectural structure (e.g. starting from the GUI or main menu). Components or systems are substituted by **stubs**.
 
 [![Top-Down integration testing image from TryQA](http://tryqa.com/wp-content/uploads/2012/01/What-is-top-down-integration-testing.jpg)](https://tryqa.com/what-is-integration-testing/)
 
+#### Bottom up Integration Testing
+Testing takes place from the bottom of the control flow upwards. Components or systems are substituted by **drivers**. Below is the image of ‘Bottom up approach’:
+
+[![Bottom integration testing image from TryQA](http://tryqa.com/wp-content/uploads/2012/01/what-is-bottom-up-integration-testing.jpg)](https://tryqa.com/what-is-integration-testing/)
 
 ---
