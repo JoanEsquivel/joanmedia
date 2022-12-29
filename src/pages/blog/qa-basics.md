@@ -1,6 +1,6 @@
 ---
 layout: "../../layouts/PostLayout.astro"
-title: "QA Basics(work in progress)"
+title: "QA Basics"
 description: "Article with a full guide to learn software testing, and crack any interview"
 pubDate: "Nov 17 2022"
 heroImage: "https://images.unsplash.com/photo-1600267165477-6d4cc741b379?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
