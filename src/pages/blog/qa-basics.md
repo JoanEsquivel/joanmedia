@@ -20,6 +20,7 @@ This article will have a list of different topics that you may need to know, and
 6. [Testing Principles](#6)
 7. [Test process (The big picture)](#7)
 8. [Test Work Products](#8)
+9. [What is the difference between stub and drivers?](#9)
 
 ---
 
@@ -194,5 +195,18 @@ An RCA is a mechanism of analyzing defects to identify its cause:
 - change requests
 - product backlog
 - finalized testware
+
+---
+
+### 9. What is the difference between stub and drivers? <a name="9"></a>
+
+**Stubs** and **drivers** are modules developed to **emulate missing parts of a software**.
+
+Integration testing has different approaches, but there are a couple of them that implies stubs and drivers:
+#### Top-down Integration Testing
+Testing takes place from top to bottom, following the control flow or architectural structure (e.g. starting from the GUI or main menu). Components or systems are substituted by stubs.
+
+[![Top-Down integration testing image from TryQA](http://tryqa.com/wp-content/uploads/2012/01/What-is-top-down-integration-testing.jpg)](https://tryqa.com/what-is-integration-testing/)
+
 
 ---
