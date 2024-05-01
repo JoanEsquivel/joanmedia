@@ -1,9 +1,10 @@
 ---
-layout: "../../layouts/PostLayout.astro"
 title: "Webdriver.IO + Appium for Mobile Testing"
 description: "Article with a full guide to get your automatated mobile tests for IOS & Android up and running"
 pubDate: "Sep 10 2022"
 heroImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+badge: "Mobile Framework"
+tags: ["QA","Automation"]
 ---
 
 ## General System Requirements

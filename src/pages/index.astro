@@ -1,50 +1,63 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HorizontalCard from "../components/HorizontalCard.astro";
+import { getCollection } from "astro:content";
+import createSlug from "../lib/createSlug"
 
-const posts = (await Astro.glob("./blog/*.{md,mdx}")).sort(
-  (a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()
-);
+const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const last_posts = posts.slice(0, 3);
 ---
 
-<BaseLayout>
-
-    <div class="pb-12 mt-5">
-      <div class="text-xl py-1">Hey there 👋</div>
-      <div class="text-5xl font-bold">I'm Joan Esquivel</div>
-      <div class="text-3xl py-3 font-bold">QA Engineer</div>
-      <div class="py-2">
-        <text class="text-lg">
-          In this website you can overview my cv, udemy courses, and blog posts.
-          </text
-        >
-      </div>
-      <div class="mt-8">
-        <a class="btn" href="https://www.linkedin.com/in/joanesquivel/" target="_blank"> Let's connect!</a>
-        <a class="btn btn-outline" href="https://discord.gg/pwBAPPjg" target="_blank"> ENG Discord Server</a>
-        <a class="btn btn-outline" href="https://discord.gg/fDqVr7F4" target="_blank"> SPA Discord Server</a>
-      </div>
+<BaseLayout sideBarActiveItemID="home">
+  <div class="pb-12 mt-5">
+    <div class="text-xl py-1">Hey masters 👋</div>
+    <div class="text-5xl font-bold">I'm Joan Esquivel</div>
+    <div class="text-3xl py-3 font-bold">Software QA Engineer</div>
+    <div class="py-2">
+      <text class="text-lg">
+        You will find my projects, conferences, and products in this website. I hope you enjoy it!
+      </text>
     </div>
-
-
-
-    <div>
-      <div class="text-3xl w-full font-bold mb-5 mt-10">Latest from blog</div>
+    <div class="mt-8">
+      <a class="btn" href="https://www.linkedin.com/in/joanesquivel/" target="_blank"> Let's connect in LinkedIn!</a>
+      <a href="https://www.youtube.com/@joanmedia" target="_blank" class="btn btn-outline ml-5">
+        Check my YT Channel
+      </a>
     </div>
+  </div>
 
-    {
-      last_posts.map((post) => (
+  <div>
+    <div class="text-3xl w-full font-bold mb-2">My last projects {"</>"}</div>
+  </div>
+
+  <HorizontalCard
+    title="Playwright + Python for Pycon Colombia 2024"
+    img="/playwright.webp"
+    desc="This project/repository hosts the foundational code for the workshop at PyCon Colombia 2024, focusing on Playwright—a versatile, open-source automation library created by Microsoft, recently enhanced to support Python."
+    url="https://github.com/JoanEsquivel/playwright-pycon"
+    badge="CONF"
+  />
+  <div class="divider my-0"></div>
+
+
+  <div>
+    <div class="text-3xl w-full font-bold mb-5 mt-10">Latest from blog</div>
+  </div>
+
+  {
+    last_posts.map((post) => (
+      <>
         <HorizontalCard
-          title={post.frontmatter.title}
-          img={post.frontmatter.heroImage}
-          desc={post.frontmatter.description}
-          url={post.url}
+          title={post.data.title}
+          img={post.data.heroImage}
+          desc={post.data.description}
+          url={"/blog/" + createSlug(post.data.title, post.slug)}
           target="_self"
+          badge={post.data.badge}
         />
-        <div class="divider my-0"></div>
-      ))
-    }
-
+        <div class="divider my-0" />
+      </>
+    ))
+  }
 </BaseLayout>
