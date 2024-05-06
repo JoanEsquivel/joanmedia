@@ -1,7 +1,7 @@
 ---
 title: "QA Engineer/SDET Roadmap"
 description: "Here's a compilation of topics that, in my view, are crucial for your journey to becoming a successful QA Engineer or Software Developer In Test (SDET)."
-pubDate: "Sep 10 2022"
+pubDate: "May 5 2024"
 heroImage: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 badge: "Roadmap"
 tags: ["QA", "Automation"]
