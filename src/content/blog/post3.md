@@ -7,15 +7,6 @@ badge: "Roadmap"
 tags: ["QA", "Automation"]
 ---
 
----
-title: "QA Engineer/SDET Roadmap"
-description: "Here's a compilation of topics that, in my view, are crucial for your journey to becoming a successful QA Engineer or Software Developer In Test (SDET)."
-pubDate: "Sep 10 2022"
-heroImage: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-badge: "Roadmap"
-tags: ["QA", "Automation"]
----
-
 # Roadmap for a QA Engineer
 
 Here's a compilation of topics that, in my view, are crucial for your journey to becoming a successful QA Engineer or Software Developer In Test (SDET).
@@ -28,7 +19,7 @@ Here's a compilation of topics that, in my view, are crucial for your journey to
 
 You might want to take a look at the [roadmap provided by roadmap.sh](https://roadmap.sh/qa) for a broader perspective.
 
-## Quality Management <a name="1"></a> [↩︎](#table-of-contents)
+## Quality Management <a name="1"></a> [↩︎](##topics)
 
 Quality Management includes all activities that direct and control an organization with regard to quality. It includes Quality Assurance and Quality Control. 
 
@@ -96,5 +87,5 @@ TBD
 #### Test Documents
 TBD
 
-## Agile <a name="2"></a> [↩︎](#table-of-contents)
+## Agile <a name="2"></a> [↩︎](##topics)
 
