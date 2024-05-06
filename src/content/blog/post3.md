@@ -12,14 +12,14 @@ tags: ["QA", "Automation"]
 Here's a compilation of topics that, in my view, are crucial for your journey to becoming a successful QA Engineer or Software Developer In Test (SDET).
 
 
-## Topics
+## Topics <a name="0"></a>
 1. [Quality Management](#1)
 2. [Agile & scrum](#2)
 
 
 You might want to take a look at the [roadmap provided by roadmap.sh](https://roadmap.sh/qa) for a broader perspective.
 
-## Quality Management <a name="1"></a> [↩︎](##topics)
+## Quality Management <a name="1"></a> [↩︎](#0)
 
 Quality Management includes all activities that direct and control an organization with regard to quality. It includes Quality Assurance and Quality Control. 
 
@@ -87,5 +87,5 @@ TBD
 #### Test Documents
 TBD
 
-## Agile <a name="2"></a> [↩︎](##topics)
+## Agile <a name="2"></a> [↩︎](#0)
 
