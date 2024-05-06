@@ -15,6 +15,9 @@ Here's a compilation of topics that, in my view, are crucial for your journey to
 ## Topics <a name="0"></a>
 1. [Quality Management](#1)
 2. [Agile & scrum](#2)
+3. [Automation testing](#3)
+4. [Continuous Integration (CI) and Continuous Deployment (CD)](#4)
+5. [Databases ](#5)
 
 
 You might want to take a look at the [roadmap provided by roadmap.sh](https://roadmap.sh/qa) for a broader perspective.
@@ -54,18 +57,16 @@ Software testing is a process of executing a program or application with the int
 
 *Static testing:* Testing that does not involve the execution of the component or system being tested. It can test and find defects without executing code. Static Testing is done during the verification process. This testing includes reviewing of the documents (including source code) and static analysis. This is a useful and cost-effective way of testing.  For example: reviewing, walkthrough, inspection, etc.
 #### 7 testing principles
+TBD
 
 #### Typical objectives of testing
+TBD
 
 #### Testing vs debugging
+TBD
+#### Testing types and techniques
 
-
-  - Video reference:
-    - [English video reference](https://www.youtube.com/watch?v=TDynSmrzpXw&list=PLDC2A0C8D2EC934C7)
-    - [Spanish video reference](https://www.youtube.com/watch?v=RKMaLibe1EM&list=PLLYWsphuMYKtH2f4HgajbW-Po2OygQ8--&index=2)
-### Testing types and techniques
-
-### Error, defect, and failure
+#### Error, defect, and failure
 A person can make an error(mistake). 
 
 An error can lead to the introduction of a defect (fault or bug).
@@ -87,5 +88,17 @@ TBD
 #### Test Documents
 TBD
 
-## Agile <a name="2"></a> [↩︎](#0)
+## Agile & Scrum<a name="2"></a> [↩︎](#0)
+
+## Automation testing <a name="3"></a> [↩︎](#0)
+
+### Programming basics
+### Frontend Automation
+### Backend Automation
+### Non functional Automation
+
+## Continuous Integration (CI) and Continuous Deployment (CD) <a name="4"></a> [↩︎](#0)
+
+## Databases  <a name="5"></a> [↩︎](#0)
+
 
