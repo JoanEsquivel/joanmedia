@@ -3,31 +3,18 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import TimeLineElement from "../components/cv/TimeLine.astro";
 ---
 
-<BaseLayout title="Resume" sideBarActiveItemID="cv">
+<BaseLayout title="Resume">
   <div class="mb-5">
     <div class="text-3xl w-full font-bold">Profile</div>
   </div>
 
   <div class="mb-10 text-justify">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-    aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-    cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  </div>
-
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Education</div>
-  </div>
-
-  <div class="time-line-container grid gap-4 mb-10">
-    <TimeLineElement
-      title="Title Name"
-      subtitle="[start year] to [end year] at [Study Center Name], [City], [Country]"
-    />
-    <TimeLineElement
-      title="Title Name"
-      subtitle="[start year] to [end year] at [Study Center Name], [City], [Country]"
-    />
+    I have experience in infrastructure operations and digital projects. I am a
+    self motivated professional always looking oportunities to help and improve.
+    I consider myself as a learner. I´ve made a positive impact working with
+    partners that have high level of importance such as Autodesk, Linksys,
+    Belkin,Citi retail services, Subaru, Microfocus, Accenture Search and
+    Content Analytics, and Shell.
   </div>
 
   <div class="mb-5">
@@ -36,23 +23,40 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
 
   <div class="time-line-container mb-10">
     <TimeLineElement
-      title="Job Title at Project or Company Name"
-      subtitle="From [Start Date] to [End Date] at [Company], [City], [Country]"
-    >
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
-    </TimeLineElement>
+      title="Quality Assurance Engineer"
+      subtitle="From 2023 at Build with Build, San Jose, Costa Rica"
+      desc="Industry: Analytics & Data"
+    />
     <TimeLineElement
-      title="Job Title at Project or Company Name"
-      subtitle="From [Start Date] to [End Date] at [Company], [City], [Country]"
-    >
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
-    </TimeLineElement>
+      title="Senior Quality Assurance Automation Engineer"
+      subtitle="From 2021 to 2023 at Accenture, San Jose, Costa Rica"
+      desc="Industry: Search & Content Analytics"
+    />
     <TimeLineElement
-      title="Job Title at Project or Company Name"
-      subtitle="From [Start Date] to [End Date] at [Company], [City], [Country]"
-    >
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
-    </TimeLineElement>
+      title="QA Automation Engineer"
+      subtitle="From 2020 to 2021 at Microfocus, San Jose, Costa Rica"
+      desc="Industry: Security analytics & forensic investigation tools"
+    />
+    <TimeLineElement
+      title="QA Automation Engineer"
+      subtitle="From 2017 to 2020 at Accenture, San Jose, Costa Rica"
+      desc="Industries: Retail and Consumer Goods - Banking and Financial Services"
+    />
+  </div>
+
+  <div class="mb-5">
+    <div class="text-3xl w-full font-bold">Education</div>
+  </div>
+
+  <div class="time-line-container grid gap-4 mb-10">
+    <TimeLineElement
+      title="Business administration with emphasis in Marketing"
+      subtitle="In progress at Universidad Hispanoamericana, Costa Rica"
+    />
+    <TimeLineElement
+      title="Sofware Engineering"
+      subtitle="In progress at Universidad Hispanoamericana, Costa Rica"
+    />
   </div>
 
   <div class="mb-5">
@@ -61,10 +65,12 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
 
   <ul class="list-disc mx-6 mb-10 grid gap-2">
     <li>
-      <a href="#" target="_blank"> Certification Name (with link)</a>
-    </li>
-    <li>
-      <a href="#" target="_blank"> Certification Name (with link)</a>
+      <a
+        href="https://www.credly.com/badges/18c70723-359a-4850-9785-56a56a853429?source=linked_in_profile"
+        target="_blank"
+      >
+        Scrum Foundation Professional Certificate - SFPC™</a
+      >
     </li>
   </ul>
 
@@ -72,21 +78,16 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
     <div class="text-3xl w-full font-bold">Skills</div>
   </div>
 
-  <ul class="list-disc md:columns-5 columns-2 mx-6">
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
-    <li>Skill Name</li>
+  <ul class="list-disc md:columns-3 columns-2 mx-6">
+    <li>Spanish (Native)</li>
+    <li>English (Business)</li>
+    <li>Quality Assurance Management</li>
+    <li>Web Testing </li>
+    <li>Mobile Testing </li>
+    <li>API Testing </li>
+    <li>Performance Testing </li>
+    <li>Accessibility Testing</li>
+    <li>CI CD Tools</li>
+    <li>Cloud knowledge</li>
   </ul>
 </BaseLayout>
