@@ -1,35 +1,27 @@
 ---
-title: "How to setup Appium for Mobile Testing + WebdriverIO"
-description: "I want to share my experience with Appium and WebdriverIO for mobile testing. I will share my setup for both Android and IOS, and how to run the tests. Also, I will be sharing an example of how to run the tests in a real device using BrowserStack."
+title: "Object Oriented Programming"
+description: "I am creating a series of videos about Python OOP. I will be sharing my experience with Python OOP and how to use it in real projects related with automation."
 pubDate: "Wed Dec 25 2024"
-heroImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-badge: "Mobile Framework"
-tags: ["QA","Automation"]
+heroImage: "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+badge: "Programming Language"
+tags: ["Python","OOP"]
 ---
 
-## Appium
-Appium is an open-source tool for automating native, hybrid, and mobile web apps on iOS, Android, and Windows devices. It allows you to remotely control mobile devices or emulators from your test scripts. 
+## Python
+Python is a high-level, interpreted programming language that is easy to learn and use. It is widely used in automation, data analysis, and web development.
 
-## WebdriverIO
-WebdriverIO is a test automation framework that allows you to write tests in JavaScript or TypeScript. It is built on top of WebdriverJS and supports the W3C WebDriver protocol.
+## OOP
+OOP is a programming paradigm that is based on the concept of "objects", which can contain data and code to manipulate that data. However, when we are using Python, there might be some differences compared to other languages like Java or C#.
 
-### Setup videos
-The setup might be a bit tricky, but I will try to make it as easy as possible. Please check the videos below to get a detailed explanation of how to setup Appium and WebdriverIO for mobile testing.
+### Classes
+The first thing we need to understand is the concept of classes. A class is a blueprint for creating objects. It defines a set of attributes and methods that the object will have.
 
-## Android native setup 
 
-[![ANDROID TESTING VIDEO](https://i.ytimg.com/vi/KN1sTvvX0mM/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLDC0X2Kx_5FPhY5cmlf0z0RkOibLg)](https://www.youtube.com/watch?v=KN1sTvvX0mM&t=2569s)
+[![Python: Classes & Objects](https://i.ytimg.com/vi/_e-4VQeWttg/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLD2EKFi3cm73wdKI_iTiamn-I555w)](https://www.youtube.com/watch?v=_e-4VQeWttg)
 
-## IOS native setup
-[![IOS TESTING VIDEO](https://i.ytimg.com/vi/Q5Oy8axA8Qw/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLDmG3b95GcxBsdwYa4Noo9Cy3-Zpg)](https://www.youtube.com/watch?v=Q5Oy8axA8Qw&ab_channel=JoanMedia)
+Check the [dog.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/master/introduction/basics/dog.py) file to see the example of a class.
 
-## Running tests in a real device using BrowserStack
+### Inheritance
+Inheritance is a mechanism where a new class, known as a child or subclass, is created based on an existing class, called a parent or superclass. The child class inherits properties and methods from the parent class, allowing for code reuse and the creation of a hierarchical relationship between classes.
 
-[![BROWSERSTACK TESTING VIDEO](https://i.ytimg.com/vi/XSHifNNWML4/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLCZtgQygo5frVnUE9lAun7QXAMwew)](https://www.youtube.com/watch?v=XSHifNNWML4&pp=ygUeYXBwaXVtIGJyb3dzZXJzdGFjayAgam9hbm1lZGlh)
-### Documentation references
-
-- [UI Selectors (Android)](https://developer.android.com/reference/androidx/test/uiautomator/UiSelector)
-
-- [Predicate Strings Selectors (IOS)](https://appium.io/docs/en/writing-running-appium/ios/ios-predicate/)
-
-- [Class Chain Selectors (IOS)](https://github.com/facebookarchive/WebDriverAgent/wiki/Class-Chain-Queries-Construction-Rules)
+The video will be **available soon**.
