@@ -25,3 +25,28 @@ Check the [dog.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/mast
 Inheritance is a mechanism where a new class, known as a child or subclass, is created based on an existing class, called a parent or superclass. The child class inherits properties and methods from the parent class, allowing for code reuse and the creation of a hierarchical relationship between classes.
 
 The video will be **available soon**.
+
+Check the [inheritance.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/master/introduction/pilars/inheritance.py) file to see the example of inheritance.
+
+### Polymorphism
+Polymorphism is the ability of objects to take on many forms. In Python, polymorphism allows us to use the same abstract class in different classes.
+
+The video will be **available soon**.
+
+Check the [polymorphism.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/master/introduction/pilars/polimorphism.py) file to see the example of polymorphism.
+
+### Encapsulation
+Encapsulation is the mechanism of hiding the internal details of an object and only exposing the necessary parts of the object to the outside world.
+
+The video will be **available soon**.
+
+Check the [encapsulation.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/master/introduction/pilars/encapsulation.py) file to see the example of encapsulation.
+
+### Abstraction
+Abstraction is the process of hiding the complex details of an object and only exposing the necessary parts of the object to the outside world.
+
+
+
+The video will be **available soon**.
+
+Check the [abstraction.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/master/introduction/pilars/abstraction.py) file to see the example of abstraction.
