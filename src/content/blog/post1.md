@@ -3,8 +3,8 @@ title: "How to setup Appium for Mobile Testing + WebdriverIO"
 description: "I want to share my experience with Appium and WebdriverIO for mobile testing. I will share my setup for both Android and IOS, and how to run the tests. Also, I will be sharing an example of how to run the tests in a real device using BrowserStack."
 pubDate: "Wed Dec 25 2024"
 heroImage: "https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-badge: "Mobile Framework"
-tags: ["QA","Automation"]
+badge: "WebdriverIO"
+tags: ["Appium","Javascript","Typescript", "Mobile Automation"]
 ---
 
 ## Appium
