@@ -24,7 +24,7 @@ Check the [dog.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/mast
 ### Inheritance
 Inheritance is a mechanism where a new class, known as a child or subclass, is created based on an existing class, called a parent or superclass. The child class inherits properties and methods from the parent class, allowing for code reuse and the creation of a hierarchical relationship between classes.
 
-The video will be **available soon**.
+[![Python: Inheritance](https://i.ytimg.com/vi/dbSMxNLpWpA/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLD9GPqFrVhx9V7t0pTqyN4mHJ3kYw)](https://www.youtube.com/watch?v=dbSMxNLpWpA)
 
 Check the [inheritance.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/master/introduction/pilars/inheritance.py) file to see the example of inheritance.
 
