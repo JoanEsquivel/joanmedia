@@ -31,22 +31,19 @@ Check the [inheritance.py](https://github.com/JoanEsquivel/python-poo-patterns/b
 ### Polymorphism
 Polymorphism is the ability of objects to take on many forms. In Python, polymorphism allows us to use the same abstract class in different classes.
 
-The video will be **available soon**.
 
 Check the [polymorphism.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/master/introduction/pilars/polimorphism.py) file to see the example of polymorphism.
 
 ### Encapsulation
 Encapsulation is the mechanism of hiding the internal details of an object and only exposing the necessary parts of the object to the outside world.
 
-The video will be **available soon**.
 
 Check the [encapsulation.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/master/introduction/pilars/encapsulation.py) file to see the example of encapsulation.
 
 ### Abstraction
 Abstraction is the process of hiding the complex details of an object and only exposing the necessary parts of the object to the outside world.
 
-
-
-The video will be **available soon**.
-
 Check the [abstraction.py](https://github.com/JoanEsquivel/python-poo-patterns/blob/master/introduction/pilars/abstraction.py) file to see the example of abstraction.
+
+I created a video to talk about Polymorphism, Encapsulation and Abstraction in Python. Please check it out!
+[![Python: OOP Pilars](https://i.ytimg.com/vi/Dz2jBQem-3Y/hqdefault.jpg?sqp=-oaymwEnCNACELwBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLD8SRzKO6UG_c24oHdCbiZX_NWArQ)](https://www.youtube.com/watch?v=Dz2jBQem-3Y)
