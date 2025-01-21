@@ -26,6 +26,7 @@ Playwright is a powerful and flexible library for automating web browsers. It al
 - [Authentication](#authentication)
 - [Playwright Report - Alternative](#playwright-report---alternative)
 - [Automated Accessibility Testing](#automated-accessibility-testing)
+- [Playwright ARIA Snapshots](#playwright-aria-snapshots)
 
 
 ## Install Playwright
@@ -108,3 +109,9 @@ There is a alternative to generate a report of your tests using Playwright. it i
 In this video I will show you how to use Playwright to test the accessibility of your web application.
 
 [![Playwright Automated Accessibility Testing](https://i.ytimg.com/vi/HGWVtE66mtY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLA6IASJQ2pe36HUYeYpC2abXQWiMw)](https://www.youtube.com/watch?v=HGWVtE66mtY&list=PLYDwWPRvXB89caN5PHWDLrXJuyugu5Mg_&index=14)
+
+## Playwright ARIA Snapshots
+
+In this video I will show you how to use Playwright ARIA Snapshots to test the accessibility tree of your web application.
+
+[![Playwright ARIA Snapshots](https://i.ytimg.com/vi/O5X4XusM35s/hq720.jpg?sqp=-…BACGAY4AUAB&rs=AOn4CLD-vpMRs1hiphtyEi4_8ZUL4yLfvg)](https://www.youtube.com/watch?v=O5X4XusM35s&list=PLYDwWPRvXB89caN5PHWDLrXJuyugu5Mg_&index=16)
