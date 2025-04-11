@@ -83,12 +83,45 @@ const { tags } = Astro.props;
         container.style.display = 'none';
       });
       
-      // Show filtered posts
-      visiblePosts.forEach(post => {
-        const postElement = post as HTMLElement;
-        const container = postElement.closest('li') || postElement;
-        container.style.display = '';
+      // Apply sorting to visible posts
+      visiblePosts.sort((a, b) => {
+        const dateA = new Date(a.getAttribute('data-date') || '').getTime();
+        const dateB = new Date(b.getAttribute('data-date') || '').getTime();
+        return state.sortBy === 'newest' ? dateB - dateA : dateA - dateB;
       });
+      
+      // Show sorted and filtered posts by reordering in the DOM
+      const safePostsContainer = postsContainer as HTMLElement;  // Cast to HTMLElement
+      if (visiblePosts.length > 0 && safePostsContainer.children.length > 0) {
+        // Get first post container to use as reference
+        const firstPostContainer = visiblePosts[0].closest('li') || visiblePosts[0];
+        const parentContainer = firstPostContainer.parentElement;
+        
+        if (parentContainer) {
+          // Move each visible post to maintain sort order
+          visiblePosts.forEach((post, index) => {
+            const postContainer = (post.closest('li') || post) as HTMLElement;
+            postContainer.style.display = '';
+            
+            // Add the posts in the correct order
+            if (index === 0) {
+              // First post goes at the beginning 
+              parentContainer.prepend(postContainer);
+            } else {
+              // Others get placed after the previous one
+              const previousPost = visiblePosts[index-1];
+              const previousContainer = (previousPost.closest('li') || previousPost) as HTMLElement;
+              previousContainer.after(postContainer);
+            }
+          });
+        } else {
+          // Fallback if we can't get parent container
+          visiblePosts.forEach(post => {
+            const postContainer = (post.closest('li') || post) as HTMLElement;
+            postContainer.style.display = '';
+          });
+        }
+      }
       
       // Show a message if no posts are found
       const noResultsMessage = document.getElementById('no-results-message');
@@ -107,6 +140,7 @@ const { tags } = Astro.props;
       
       // Log information for debugging
       console.log(`Final display: ${visiblePosts.length} visible posts of ${allPosts.length} total`);
+      console.log(`Current sort order: ${state.sortBy}`);
     }
     
     // Listen for search events from BlogSearch
@@ -118,6 +152,7 @@ const { tags } = Astro.props;
     // Add event listeners for filters
     sortSelect.addEventListener('change', () => {
       state.sortBy = sortSelect.value;
+      console.log(`Sort changed to: ${state.sortBy}`);
       updatePosts();
       // Notify other components that filters changed
       document.dispatchEvent(new CustomEvent('blog:filter', {
