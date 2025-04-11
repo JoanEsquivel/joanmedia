@@ -44,9 +44,9 @@ const allTags = [...new Set(
         <p>There are no blog posts to show at the moment. Check back later!</p>
       </div>
     ) : (
-      <div class="blog-posts-container">
+      <ul class="blog-posts-container space-y-4">
         {page.data.map((post, index) => (
-          <div>
+          <li>
             <HorizontalCard
               title={post.data.title}
               img={post.data.heroImage}
@@ -57,10 +57,12 @@ const allTags = [...new Set(
               tags={post.data.tags}
               pubDate={post.data.pubDate.toISOString()}
             />
-            {index < page.data.length - 1 && <div class="divider my-0" />}
-          </div>
+            {index < page.data.length - 1 && 
+              <div class="divider my-0"></div>
+            }
+          </li>
         ))}
-      </div>
+      </ul>
     )
   }
 

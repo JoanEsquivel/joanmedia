@@ -7,19 +7,26 @@ import HorizontalCard from "../components/HorizontalCard.astro";
   <div>
     <div class="text-3xl w-full font-bold mb-5">Conferences</div>
   </div>
-  <HorizontalCard
-  title="PyCon US 2025 - Automated E2E testing with Playwright and Python"
-  img="/playwright.webp"
-  desc="In this 30-minute talk, I invite you to explore the universe of Playwright combined with the power of Python, a tool with great potential in the market."
-  badge="Country: USA, Language: Spanish"
-  url="https://us.pycon.org/2025/schedule/presentation/94/"
-/>
-  <HorizontalCard
-    title="PyCon Colombia 2024 - Automated E2E testing with Playwright and Python"
-    img="/playwright.webp"
-    desc="In this 30-minute talk, I invite you to explore the universe of Playwright combined with the power of Python, a tool with great potential in the market."
-    badge="Country: Colombia, Language: Spanish"
-    url="https://2024.pycon.co/en/talks/10"
-  />
-  <div class="divider my-0"></div>
+  
+  <ul class="conferences-container space-y-4">
+    <li>
+      <HorizontalCard
+        title="PyCon US 2025 - Automated E2E testing with Playwright and Python"
+        img="/playwright.webp"
+        desc="In this 30-minute talk, I invite you to explore the universe of Playwright combined with the power of Python, a tool with great potential in the market."
+        badge="Country: USA, Language: Spanish"
+        url="https://us.pycon.org/2025/schedule/presentation/94/"
+      />
+      <div class="divider my-0"></div>
+    </li>
+    <li>
+      <HorizontalCard
+        title="PyCon Colombia 2024 - Automated E2E testing with Playwright and Python"
+        img="/playwright.webp"
+        desc="In this 30-minute talk, I invite you to explore the universe of Playwright combined with the power of Python, a tool with great potential in the market."
+        badge="Country: Colombia, Language: Spanish"
+        url="https://2024.pycon.co/en/talks/10"
+      />
+    </li>
+  </ul>
 </BaseLayout>

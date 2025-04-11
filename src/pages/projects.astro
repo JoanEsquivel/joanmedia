@@ -8,44 +8,61 @@ import HorizontalCard from "../components/HorizontalCard.astro";
     <div class="text-3xl w-full font-bold mb-5">Projects</div>
   </div>
 
-  <HorizontalCard
-  title="Playwright + Python for Pycon Colombia 2024 and PyCon US 2025"
-  img="/playwright.webp"
-  desc="This project/repository hosts the foundational code for the workshop at PyCon Colombia 2024 and PyCon US 2025, focusing on Playwright—a versatile, open-source automation library created by Microsoft, recently enhanced to support Python."
-  url="https://github.com/JoanEsquivel/playwright-pycon"
-  badge="CONF"
-  />
-  <div class="divider my-0"></div>
-  <!-- <HorizontalCard
-    title="Demo Project 2"
-    img="/post_img.webp"
-    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    url="#"
-  />
+  <ul class="projects-container space-y-4">
+    <li>
+      <HorizontalCard
+        title="Playwright + Python for Pycon Colombia 2024 and PyCon US 2025"
+        img="/playwright.webp"
+        desc="This project/repository hosts the foundational code for the workshop at PyCon Colombia 2024 and PyCon US 2025, focusing on Playwright—a versatile, open-source automation library created by Microsoft, recently enhanced to support Python."
+        url="https://github.com/JoanEsquivel/playwright-pycon"
+        badge="CONF"
+      />
+    </li>
+    <!-- Commented projects can be uncommented and added as list items when needed -->
+    <!-- <li>
+      <HorizontalCard
+        title="Demo Project 2"
+        img="/post_img.webp"
+        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        url="#"
+      />
+      <div class="divider my-0"></div>
+    </li> -->
+  </ul>
 
+  <!-- Uncomment when needed
   <div>
     <div class="text-3xl w-full font-bold mb-5 mt-10">Projects Header</div>
   </div>
 
-  <HorizontalCard
-    title="Demo Project 3"
-    img="/post_img.webp"
-    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    url="#"
-    badge="FOSS"
-  />
-  <div class="divider my-0"></div>
-  <HorizontalCard
-    title="Demo Project 4"
-    img="/post_img.webp"
-    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    url="#"
-  />
-  <div class="divider my-0"></div>
-  <HorizontalCard
-    title="Demo Project 5"
-    img="/post_img.webp"
-    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    url="#"
-  /> -->
+  <ul class="projects-container space-y-4">
+    <li>
+      <HorizontalCard
+        title="Demo Project 3"
+        img="/post_img.webp"
+        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        url="#"
+        badge="FOSS"
+      />
+      <div class="divider my-0"></div>
+    </li>
+    <li>
+      <HorizontalCard
+        title="Demo Project 4"
+        img="/post_img.webp"
+        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        url="#"
+      />
+      <div class="divider my-0"></div>
+    </li>
+    <li>
+      <HorizontalCard
+        title="Demo Project 5"
+        img="/post_img.webp"
+        desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        url="#"
+      />
+    </li>
+  </ul>
+  -->
 </BaseLayout>
