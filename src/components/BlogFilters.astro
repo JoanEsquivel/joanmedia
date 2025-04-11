@@ -1,0 +1,87 @@
+---
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+---
+
+<div class="flex flex-col sm:flex-row gap-4 mb-6">
+  <div class="flex-1">
+    <label for="sort-select" class="block text-sm font-medium mb-1">Sort by</label>
+    <select 
+      id="sort-select" 
+      class="select select-bordered w-full"
+    >
+      <option value="newest">Newest first</option>
+      <option value="oldest">Oldest first</option>
+    </select>
+  </div>
+  
+  <div class="flex-1">
+    <label for="tag-filter" class="block text-sm font-medium mb-1">Filter by topic</label>
+    <select 
+      id="tag-filter" 
+      class="select select-bordered w-full"
+    >
+      <option value="">All topics</option>
+      {tags.map((tag) => (
+        <option value={tag}>{tag}</option>
+      ))}
+    </select>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
+    const tagFilter = document.getElementById('tag-filter') as HTMLSelectElement;
+    const blogPosts = document.querySelectorAll('.blog-post-card');
+    const postsContainer = document.querySelector('.blog-posts-container');
+    
+    if (!postsContainer) return;
+    
+    // Function to handle sorting and filtering
+    function updatePosts() {
+      const sortBy = sortSelect.value;
+      const filterTag = tagFilter.value;
+      
+      // Convert NodeList to Array for sorting
+      const postsArray = Array.from(blogPosts);
+      
+      // Filter posts by tag
+      const filteredPosts = filterTag 
+        ? postsArray.filter(post => {
+            const postTags = post.getAttribute('data-tags')?.split(',') || [];
+            return postTags.includes(filterTag);
+          })
+        : postsArray;
+      
+      // Sort posts by date
+      filteredPosts.sort((a, b) => {
+        const dateA = new Date(a.getAttribute('data-date') || '').getTime();
+        const dateB = new Date(b.getAttribute('data-date') || '').getTime();
+        
+        return sortBy === 'newest' ? dateB - dateA : dateA - dateB;
+      });
+      
+      // First hide all posts
+      postsArray.forEach(post => {
+        (post as HTMLElement).style.display = 'none';
+      });
+      
+      // Then show filtered and sorted posts
+      filteredPosts.forEach(post => {
+        (post as HTMLElement).style.display = '';
+        postsContainer!.appendChild(post);
+      });
+    }
+    
+    // Add event listeners
+    sortSelect.addEventListener('change', updatePosts);
+    tagFilter.addEventListener('change', updatePosts);
+    
+    // Initialize on page load
+    updatePosts();
+  });
+</script> 
