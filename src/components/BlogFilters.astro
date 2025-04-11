@@ -36,50 +36,104 @@ const { tags } = Astro.props;
   document.addEventListener('DOMContentLoaded', () => {
     const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
     const tagFilter = document.getElementById('tag-filter') as HTMLSelectElement;
-    const blogPosts = document.querySelectorAll('.blog-post-card');
     const postsContainer = document.querySelector('.blog-posts-container');
     
     if (!postsContainer) return;
     
+    // Global state for search and filters
+    const state = {
+      searchTerm: '',
+      sortBy: 'newest',
+      filterTag: ''
+    };
+    
+    // Store original posts for reference
+    const allPosts = Array.from(document.querySelectorAll('.blog-post-card'));
+    
     // Function to handle sorting and filtering
     function updatePosts() {
-      const sortBy = sortSelect.value;
-      const filterTag = tagFilter.value;
+      console.log(`Starting update. Filter tag: "${state.filterTag}", Search term: "${state.searchTerm}"`);
+      console.log(`Initial post count: ${allPosts.length}`);
       
-      // Convert NodeList to Array for sorting
-      const postsArray = Array.from(blogPosts);
-      
-      // Filter posts by tag
-      const filteredPosts = filterTag 
-        ? postsArray.filter(post => {
-            const postTags = post.getAttribute('data-tags')?.split(',') || [];
-            return postTags.includes(filterTag);
-          })
-        : postsArray;
-      
-      // Sort posts by date
-      filteredPosts.sort((a, b) => {
-        const dateA = new Date(a.getAttribute('data-date') || '').getTime();
-        const dateB = new Date(b.getAttribute('data-date') || '').getTime();
+      // First determine which posts should be visible based on filters
+      const visiblePosts = allPosts.filter(post => {
+        // Check search term
+        const title = post.getAttribute('data-title')?.toLowerCase() || '';
+        const description = post.getAttribute('data-description')?.toLowerCase() || '';
+        const matchesSearch = state.searchTerm === '' || 
+                              title.includes(state.searchTerm) || 
+                              description.includes(state.searchTerm);
         
-        return sortBy === 'newest' ? dateB - dateA : dateA - dateB;
+        // Check tag filter
+        let matchesTag = true;
+        if (state.filterTag && state.filterTag !== '') {
+          const postTags = post.getAttribute('data-tags')?.split(',') || [];
+          matchesTag = postTags.includes(state.filterTag);
+        }
+        
+        return matchesSearch && matchesTag;
       });
       
-      // First hide all posts
-      postsArray.forEach(post => {
-        (post as HTMLElement).style.display = 'none';
+      console.log(`Posts matching filters: ${visiblePosts.length}`);
+      
+      // Hide all posts first
+      allPosts.forEach(post => {
+        const postElement = post as HTMLElement;
+        const container = postElement.closest('li') || postElement;
+        container.style.display = 'none';
       });
       
-      // Then show filtered and sorted posts
-      filteredPosts.forEach(post => {
-        (post as HTMLElement).style.display = '';
-        postsContainer!.appendChild(post);
+      // Show filtered posts
+      visiblePosts.forEach(post => {
+        const postElement = post as HTMLElement;
+        const container = postElement.closest('li') || postElement;
+        container.style.display = '';
       });
+      
+      // Show a message if no posts are found
+      const noResultsMessage = document.getElementById('no-results-message');
+      if (visiblePosts.length === 0 && !noResultsMessage) {
+        const message = document.createElement('div');
+        message.id = 'no-results-message';
+        message.className = 'bg-base-200 border-l-4 border-secondary w-full p-4 min-w-full mt-4';
+        message.innerHTML = `
+          <p class="font-bold">No posts found</p>
+          <p>Try adjusting your search or filters to find what you're looking for.</p>
+        `;
+        (postsContainer as HTMLElement).appendChild(message);
+      } else if (visiblePosts.length > 0 && noResultsMessage) {
+        noResultsMessage.remove();
+      }
+      
+      // Log information for debugging
+      console.log(`Final display: ${visiblePosts.length} visible posts of ${allPosts.length} total`);
     }
     
-    // Add event listeners
-    sortSelect.addEventListener('change', updatePosts);
-    tagFilter.addEventListener('change', updatePosts);
+    // Listen for search events from BlogSearch
+    document.addEventListener('blog:search', (e: CustomEvent) => {
+      state.searchTerm = e.detail.searchTerm;
+      updatePosts();
+    });
+    
+    // Add event listeners for filters
+    sortSelect.addEventListener('change', () => {
+      state.sortBy = sortSelect.value;
+      updatePosts();
+      // Notify other components that filters changed
+      document.dispatchEvent(new CustomEvent('blog:filter', {
+        detail: { type: 'sort', value: state.sortBy }
+      }));
+    });
+    
+    tagFilter.addEventListener('change', () => {
+      state.filterTag = tagFilter.value;
+      console.log(`Tag filter changed to: "${state.filterTag}"`);
+      updatePosts();
+      // Notify other components that filters changed
+      document.dispatchEvent(new CustomEvent('blog:filter', {
+        detail: { type: 'tag', value: state.filterTag }
+      }));
+    });
     
     // Initialize on page load
     updatePosts();

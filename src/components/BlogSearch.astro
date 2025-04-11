@@ -26,21 +26,34 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('blog-search') as HTMLInputElement;
-    const blogPosts = document.querySelectorAll('.blog-post-card');
     
-    searchInput.addEventListener('input', () => {
+    // Create a debounce function to avoid excessive filtering
+    function debounce(fn: Function, delay: number) {
+      let timer: ReturnType<typeof setTimeout>;
+      return function(...args: any[]) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
+      }
+    }
+    
+    // Handle search input with debounce
+    const handleSearch = debounce(() => {
       const searchTerm = searchInput.value.toLowerCase().trim();
+      console.log(`Search term: "${searchTerm}"`);
       
-      blogPosts.forEach(post => {
-        const title = post.getAttribute('data-title')?.toLowerCase() || '';
-        const description = post.getAttribute('data-description')?.toLowerCase() || '';
-        
-        if (title.includes(searchTerm) || description.includes(searchTerm)) {
-          (post as HTMLElement).style.display = '';
-        } else {
-          (post as HTMLElement).style.display = 'none';
-        }
-      });
+      // Only dispatch the event, let BlogFilters handle all visibility changes
+      document.dispatchEvent(new CustomEvent('blog:search', {
+        detail: { searchTerm }
+      }));
+    }, 200);
+    
+    // Listen to events from filters to keep the search input in sync
+    document.addEventListener('blog:filter', (e: CustomEvent) => {
+      // We don't need to handle this specifically anymore
+      // as the filter component now handles all visibility logic
     });
+    
+    // Add event listener for input
+    searchInput.addEventListener('input', handleSearch);
   });
 </script> 

@@ -36,6 +36,16 @@ const allTags = [...new Set(
     .map(post => post.data.tags || [])
     .flat()
 )] as string[];
+
+// Add the current tag if it's not in the extracted tags (for better UX)
+if (params.tag && !allTags.includes(params.tag)) {
+  allTags.push(params.tag);
+}
+
+// Debug info
+console.log(`Tag page for: ${params.tag}`);
+console.log(`Posts count: ${page.data.length}`);
+console.log(`Available tags: ${allTags.join(', ')}`);
 ---
 
 <BaseLayout title={"Blog - " + params.tag} sideBarActiveItemID="blog">
@@ -56,9 +66,9 @@ const allTags = [...new Set(
         <p>There are no blog posts to show at the moment. Check back later!</p>
       </div>
     ) : (
-      <div class="blog-posts-container">
+      <ul class="blog-posts-container space-y-4">
         {page.data.map((post, index) => (
-          <div>
+          <li>
             <HorizontalCard
               title={post.data.title}
               img={post.data.heroImage}
@@ -70,9 +80,9 @@ const allTags = [...new Set(
               pubDate={post.data.pubDate.toISOString()}
             />
             {index < page.data.length - 1 && <div class="divider my-0" />}
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     )
   }
 
