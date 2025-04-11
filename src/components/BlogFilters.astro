@@ -76,6 +76,13 @@ const { tags } = Astro.props;
       
       console.log(`Posts matching filters: ${visiblePosts.length}`);
       
+      // Hide all posts first
+      allPosts.forEach(post => {
+        const postElement = post as HTMLElement;
+        const container = postElement.closest('li') || postElement;
+        container.style.display = 'none';
+      });
+      
       // Apply sorting to visible posts
       visiblePosts.sort((a, b) => {
         const dateA = new Date(a.getAttribute('data-date') || '').getTime();
@@ -83,51 +90,37 @@ const { tags } = Astro.props;
         return state.sortBy === 'newest' ? dateB - dateA : dateA - dateB;
       });
       
-      // First hide all posts (without removing from DOM)
-      allPosts.forEach(post => {
-        const postElement = post as HTMLElement;
-        const container = postElement.closest('li') || postElement;
-        (container as HTMLElement).style.display = 'none';
-      });
-      
-      // Get the posts container and prepare for sorting
-      const postsParent = document.querySelector('.blog-posts-container');
-      
-      if (postsParent && visiblePosts.length > 0) {
-        // First get all list items in the current order
-        const currentListItems = Array.from(postsParent.children);
+      // Show sorted and filtered posts by reordering in the DOM
+      const safePostsContainer = postsContainer as HTMLElement;  // Cast to HTMLElement
+      if (visiblePosts.length > 0 && safePostsContainer.children.length > 0) {
+        // Get first post container to use as reference
+        const firstPostContainer = visiblePosts[0].closest('li') || visiblePosts[0];
+        const parentContainer = firstPostContainer.parentElement;
         
-        // Create a map of posts to their container li elements
-        const postMap = new Map();
-        
-        // Build the mapping
-        allPosts.forEach(post => {
-          const container = post.closest('li');
-          if (container) {
-            postMap.set(post, container);
-          }
-        });
-        
-        // Get containers for the visible posts in sorted order
-        const sortedContainers = visiblePosts
-          .map(post => postMap.get(post))
-          .filter(container => container !== undefined);
-        
-        // Display all visible containers
-        sortedContainers.forEach(container => {
-          if (container) {
-            (container as HTMLElement).style.display = '';
-          }
-        });
-        
-        // Now sort them in the DOM by appending in the right order
-        // This avoids the issues with Safari's DOM manipulation
-        sortedContainers.forEach(container => {
-          if (container) {
-            // No need to remove first, appendChild moves the element
-            postsParent.appendChild(container);
-          }
-        });
+        if (parentContainer) {
+          // Move each visible post to maintain sort order
+          visiblePosts.forEach((post, index) => {
+            const postContainer = (post.closest('li') || post) as HTMLElement;
+            postContainer.style.display = '';
+            
+            // Add the posts in the correct order
+            if (index === 0) {
+              // First post goes at the beginning 
+              parentContainer.prepend(postContainer);
+            } else {
+              // Others get placed after the previous one
+              const previousPost = visiblePosts[index-1];
+              const previousContainer = (previousPost.closest('li') || previousPost) as HTMLElement;
+              previousContainer.after(postContainer);
+            }
+          });
+        } else {
+          // Fallback if we can't get parent container
+          visiblePosts.forEach(post => {
+            const postContainer = (post.closest('li') || post) as HTMLElement;
+            postContainer.style.display = '';
+          });
+        }
       }
       
       // Show a message if no posts are found
