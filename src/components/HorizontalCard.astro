@@ -1,11 +1,15 @@
 ---
-const { title, img, desc, url, badge, tags, target = "_blank" } = Astro.props;
+const { title, img, desc, url, badge, tags, target = "_blank", pubDate } = Astro.props;
 import { Image } from "astro:assets";
 const tag_url = url.split("/").slice(0, -1).join("/") + "/tag";
 ---
 
 <div
-  class="rounded-lg bg-base-100 hover:shadow-xl transition ease-in-out hover:scale-[102%]"
+  class="rounded-lg bg-base-100 hover:shadow-xl transition ease-in-out hover:scale-[102%] blog-post-card"
+  data-title={title}
+  data-description={desc}
+  data-tags={tags?.join(",")}
+  data-date={pubDate}
 >
   <a href={url} target={target}>
     <div class="hero-content flex-col md:flex-row">
