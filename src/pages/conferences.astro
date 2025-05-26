@@ -1,41 +1,171 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import HorizontalCard from "../components/HorizontalCard.astro";
 ---
 
-<BaseLayout title="Projects" sideBarActiveItemID="services">
+<!-- 
+badge-primary - Primary theme color
+badge-secondary - Secondary theme color
+badge-accent - Accent theme color
+badge-neutral - Neutral color
+badge-info - Info/blue color
+badge-success - Success/green color
+badge-warning - Warning/yellow color
+badge-error - Error/red color
+
+--- -->
+
+
+<BaseLayout title="Conferences" sideBarActiveItemID="services">
   <div>
     <div class="text-3xl w-full font-bold mb-5">Conferences</div>
   </div>
   
-  <ul class="conferences-container space-y-4">
-    <li>
-      <HorizontalCard
-        title="AutomationSTAR 2025 - Ensuring Data Integrity: Great Expectations + Python"
-        img="/automationstart.webp"
-        desc="In modern software projects, processing and transforming data between different systems or sources is a common challenge. QA engineers are often responsible for ensuring these data pipelines function as expected. However, maintaining consistent regression tests for data integrity can become complex. This session will demonstrate how Great Expectations with Python can be used to write test scripts that validate data against acceptance criteria. The presentation will offer a practical, hands-on approach to simplifying data testing and improving efficiency."
-        badge="Country: Netherlands, Language: English"
-        url="https://automation.eurostarsoftwaretesting.com/event/2025/ensuring-data-integrity-great-expectations-python/"
-      />
-    </li>
-    <li>
-      <HorizontalCard
-        title="PyCon US 2025 - Automated E2E testing with Playwright and Python"
-        img="/playwright.webp"
-        desc="In this 30-minute talk, I invite you to explore the universe of Playwright combined with the power of Python, a tool with great potential in the market."
-        badge="Country: USA, Language: Spanish"
-        url="https://us.pycon.org/2025/schedule/presentation/94/"
-      />
-      <div class="divider my-0"></div>
-    </li>
-    <li>
-      <HorizontalCard
-        title="PyCon Colombia 2024 - Automated E2E testing with Playwright and Python"
-        img="/playwright.webp"
-        desc="In this 30-minute talk, I invite you to explore the universe of Playwright combined with the power of Python, a tool with great potential in the market."
-        badge="Country: Colombia, Language: Spanish"
-        url="https://2024.pycon.co/en/talks/10"
-      />
-    </li>
-  </ul>
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr class="bg-base-200">
+          <th class="text-left font-bold text-base">Type</th>
+          <th class="text-left font-bold text-base">Name</th>
+          <th class="text-left font-bold text-base">Language</th>
+          <th class="text-left font-bold text-base">Video</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hover:bg-base-100">
+          <td class="align-middle">
+            <div class="badge badge-primary badge-lg whitespace-nowrap px-3">Conference Talk</div>
+          </td>
+          <td class="align-middle">
+            <a 
+              href="https://automation.eurostarsoftwaretesting.com/event/2025/ensuring-data-integrity-great-expectations-python/" 
+              target="_blank" 
+              class="link link-primary font-medium hover:link-hover"
+            >
+              AutomationSTAR 2025 - Ensuring Data Integrity: Great Expectations + Python
+            </a>
+          </td>
+          <td class="align-middle">
+            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">English</div>
+          </td>
+          <td class="align-middle">
+            <span class="text-gray-500 italic">Not available yet</span>
+          </td>
+        </tr>
+        
+        <tr class="hover:bg-base-100">
+          <td class="align-middle">
+            <div class="badge badge-primary badge-lg whitespace-nowrap px-3">Conference Talk</div>
+          </td>
+          <td class="align-middle">
+            <a 
+              href="https://us.pycon.org/2025/schedule/presentation/94/" 
+              target="_blank" 
+              class="link link-primary font-medium hover:link-hover"
+            >
+              PyCon US 2025 - Automated E2E testing with Playwright and Python
+            </a>
+          </td>
+          <td class="align-middle">
+            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">Spanish</div>
+          </td>
+          <td class="align-middle">
+            <span class="text-gray-500 italic">Not available yet</span>
+          </td>
+        </tr>
+        
+        <tr class="hover:bg-base-100">
+          <td class="align-middle">
+            <div class="badge badge-primary badge-lg whitespace-nowrap px-3">Conference Talk</div>
+          </td>
+          <td class="align-middle">
+            <a 
+              href="https://2024.pycon.co/en/talks/10" 
+              target="_blank" 
+              class="link link-primary font-medium hover:link-hover"
+            >
+              PyCon Colombia 2024 - Automated E2E testing with Playwright and Python
+            </a>
+          </td>
+          <td class="align-middle">
+            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">Spanish</div>
+          </td>
+          <td class="align-middle">
+            <span class="text-gray-500 italic">Not available yet</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Interviews Section -->
+  <div class="mt-12">
+    <div class="text-3xl w-full font-bold mb-5">Interviews</div>
+  </div>
+  
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead>
+        <tr class="bg-base-200">
+          <th class="text-left font-bold text-base">Type</th>
+          <th class="text-left font-bold text-base">Name</th>
+          <th class="text-left font-bold text-base">Language</th>
+          <th class="text-left font-bold text-base">Video</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hover:bg-base-100">
+          <td class="align-middle">
+            <div class="badge badge-accent badge-lg whitespace-nowrap px-3">Interview</div>
+          </td>
+          <td class="align-middle">
+            <span class="font-medium">
+              ¿Cómo es el testing de software en Costa Rica 🇨🇷? Feat @JoanMediaES @joanmedia
+            </span>
+          </td>
+          <td class="align-middle">
+            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">Spanish</div>
+          </td>
+          <td class="align-middle">
+            <a 
+              href="https://www.youtube.com/watch?v=bEB_KkapOJ8&ab_channel=TheFreeRangeTester" 
+              target="_blank" 
+              class="btn btn-sm btn-outline btn-primary"
+            >
+              Watch Video
+            </a>
+          </td>
+        </tr>
+        
+        <tr class="hover:bg-base-100">
+          <td class="align-middle">
+            <div class="badge badge-accent badge-lg whitespace-nowrap px-3">Interview</div>
+          </td>
+          <td class="align-middle">
+            <span class="font-medium">
+              Entrevistas Testarudas invitado especial Joan Esquivel creador de @joanmedia @JoanMediaES
+            </span>
+          </td>
+          <td class="align-middle">
+            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">Spanish</div>
+          </td>
+          <td class="align-middle">
+            <a 
+              href="https://www.youtube.com/watch?v=d7eHT2uhqpI&ab_channel=TesterTestarudo" 
+              target="_blank" 
+              class="btn btn-sm btn-outline btn-primary"
+            >
+              Watch Video
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div class="mt-8 p-4 bg-base-200 rounded-lg">
+    <p class="text-sm text-gray-600">
+      <strong>Note:</strong> Video recordings will be added after the conferences take place. 
+      Check back later for updates!
+    </p>
+  </div>
 </BaseLayout>
