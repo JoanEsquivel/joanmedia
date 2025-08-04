@@ -28,8 +28,8 @@ Playwright is a powerful and flexible library for automating web browsers. It al
 - [Automated Accessibility Testing](#automated-accessibility-testing)
 - [Playwright ARIA Snapshots](#playwright-aria-snapshots)
 - [Playwright MCP Server - AI Power](#playwright-mcp-server---ai-power)
-- [Playwright New Features - Until Version 1.54](#playwright-new-features---until-version-154)
 - [PW API Plugin - Enhance your API Testing workflow](#pw-api-pluin---enhance-your-api-testing-workflow)
+- [Playwright New Features - Until Version 1.54](#playwright-new-features---until-version-154)
 
 
 
