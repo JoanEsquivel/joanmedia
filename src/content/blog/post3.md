@@ -27,6 +27,10 @@ Playwright is a powerful and flexible library for automating web browsers. It al
 - [Playwright Report - Alternative](#playwright-report---alternative)
 - [Automated Accessibility Testing](#automated-accessibility-testing)
 - [Playwright ARIA Snapshots](#playwright-aria-snapshots)
+- [Playwright MCP Server - AI Power](#playwright-mcp-server---ai-power)
+- [Playwright New Features - Until Version 1.54](#playwright-new-features---until-version-154)
+- [PW API Plugin - Enhance your API Testing workflow](#pw-api-pluin---enhance-your-api-testing-workflow)
+
 
 
 ## Install Playwright
@@ -115,3 +119,21 @@ In this video I will show you how to use Playwright to test the accessibility of
 In this video I will show you how to use Playwright ARIA Snapshots to test the accessibility tree of your web application.
 
 [![Playwright ARIA Snapshots](https://i.ytimg.com/vi/O5X4XusM35s/hq720.jpg?sqp=-…BACGAY4AUAB&rs=AOn4CLD-vpMRs1hiphtyEi4_8ZUL4yLfvg)](https://www.youtube.com/watch?v=O5X4XusM35s&list=PLYDwWPRvXB89caN5PHWDLrXJuyugu5Mg_&index=16)
+
+## Playwright MCP Server - AI Power
+Integrate Playwright + Cursor to develop test scripts & frameworks by prompt engineering
+
+[![Playwright MCP Server](https://i.ytimg.com/vi/cNh3_r6UjKk/hqdefault.jpg?sqp=-oaymwEnCPYBEIoBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLB2Eus_RZviNnP0LkI_VmSppzqxRw)](https://youtu.be/a_O3uBHO_WM?si=8dquWWBDT05ot44z)
+
+
+## PW API Pluin - Enhance your API Testing workflow
+This is an awesome plugin that help us to print the requests in the UI mode and reports 
+
+[![PW API Plugin](https://i.ytimg.com/vi/fdbs-UQQfRY/hqdefault.jpg?sqp=-oaymwEnCPYBEIoBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLA9XNIN-wxluI9bv3LHbiFCSQ-UxQ)](https://youtu.be/fdbs-UQQfRY?si=RvZLZ861h4cauCMK)
+
+
+## Playwright New Features - Until Version 1.54
+
+13 new features I discover just exploring the changelog. They are not random features, they can improve your workflow!
+
+[![What is new in Playwright?](https://i.ytimg.com/vi/ekmA3mTQwok/hqdefault.jpg?sqp=-oaymwEnCPYBEIoBSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLAcf5oPqQ90rpmgh5jluLW5uFBBPg)](https://youtu.be/ekmA3mTQwok?si=t7pNui4LBGXfwIYS)
