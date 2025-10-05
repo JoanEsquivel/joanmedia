@@ -2,9 +2,11 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HorizontalCard from "../components/HorizontalCard.astro";
 import { getCollection } from "astro:content";
-import createSlug from "../lib/createSlug"
+import createSlug from "../lib/createSlug";
 
-const posts = (await getCollection("blog")).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
 
 const last_posts = posts.slice(0, 2);
 ---
@@ -16,12 +18,23 @@ const last_posts = posts.slice(0, 2);
     <div class="text-3xl py-3 font-bold">Software QA Engineer</div>
     <div class="py-2">
       <text class="text-lg">
-        You will find my projects, conferences, and products in this website. I hope you enjoy it!
+        You will find my projects, conferences, and products in this website. I
+        hope you enjoy it!
       </text>
     </div>
     <div class="mt-8">
-      <a class="btn" href="https://www.linkedin.com/in/joanesquivel/" target="_blank"> Let's connect in LinkedIn!</a>
-      <a href="https://www.youtube.com/@joanmedia" target="_blank" class="btn btn-outline ml-5">
+      <a
+        class="btn"
+        href="https://www.linkedin.com/in/joanesquivel/"
+        target="_blank"
+      >
+        Let's connect in LinkedIn!</a
+      >
+      <a
+        href="https://www.youtube.com/@joanmedia"
+        target="_blank"
+        class="btn btn-outline ml-5"
+      >
         Check my YT Channel
       </a>
     </div>
@@ -31,9 +44,7 @@ const last_posts = posts.slice(0, 2);
     <div class="text-3xl w-full font-bold mb-2">My last projects {"</>"}</div>
   </div> -->
 
-  
   <div class="divider my-0"></div>
-
 
   <div>
     <div class="text-3xl w-full font-bold mb-5 mt-10">Latest from blog</div>
