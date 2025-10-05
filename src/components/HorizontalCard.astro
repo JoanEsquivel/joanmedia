@@ -1,10 +1,28 @@
 ---
-const { title, img, desc, url, badge, tags, target = "_blank", pubDate } = Astro.props;
-import { Image } from "astro:assets";
+// @ts-ignore Astro global is available in .astro frontmatter
+const {
+  title,
+  img,
+  desc,
+  url,
+  badge,
+  tags,
+  target = "_blank",
+  pubDate,
+} = Astro.props;
 const tag_url = url.split("/").slice(0, -1).join("/") + "/tag";
 
 // Debug log tags
-console.log(`HorizontalCard: ${title} - Tags: ${tags ? JSON.stringify(tags) : 'undefined'}`);
+console.log(
+  `HorizontalCard: ${title} - Tags: ${tags ? JSON.stringify(tags) : "undefined"}`,
+);
+const formattedDate = pubDate
+  ? new Date(pubDate).toLocaleDateString("en-US", {
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
+  : "";
 ---
 
 <div
@@ -15,20 +33,23 @@ console.log(`HorizontalCard: ${title} - Tags: ${tags ? JSON.stringify(tags) : 'u
   data-date={pubDate}
 >
   <a href={url} target={target}>
-    <div class="hero-content flex-col md:flex-row">
+    <div class="hero-content flex-col md:flex-row-reverse">
       {
         img && (
-          <Image
+          <img
             src={img}
-            width={750}
-            height={422}
-            format="webp"
             alt={title}
+            loading="lazy"
             class="max-w-full md:max-w-[13rem] rounded-lg"
           />
         )
       }
       <div class="grow w-full">
+        {
+          formattedDate && (
+            <div class="text-xs opacity-70 mb-1">{formattedDate}</div>
+          )
+        }
         <h1 class="text-xl font-bold">
           {title}
           {badge && <div class="badge badge-secondary mx-2">{badge}</div>}

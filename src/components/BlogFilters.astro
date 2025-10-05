@@ -8,127 +8,145 @@ const { tags } = Astro.props;
 
 <div class="flex flex-col sm:flex-row gap-4 mb-6">
   <div class="flex-1">
-    <label for="sort-select" class="block text-sm font-medium mb-1">Sort by</label>
-    <select 
-      id="sort-select" 
-      class="select select-bordered w-full"
+    <label for="sort-select" class="block text-sm font-medium mb-1"
+      >Sort by</label
     >
+    <select id="sort-select" class="select select-bordered w-full">
       <option value="newest">Newest first</option>
       <option value="oldest">Oldest first</option>
     </select>
   </div>
-  
+
   <div class="flex-1">
-    <label for="tag-filter" class="block text-sm font-medium mb-1">Filter by topic</label>
-    <select 
-      id="tag-filter" 
-      class="select select-bordered w-full"
+    <label for="tag-filter" class="block text-sm font-medium mb-1"
+      >Filter by topic</label
     >
+    <select id="tag-filter" class="select select-bordered w-full">
       <option value="">All topics</option>
-      {tags.map((tag) => (
-        <option value={tag}>{tag}</option>
-      ))}
+      {tags.map((tag) => <option value={tag}>{tag}</option>)}
     </select>
   </div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const sortSelect = document.getElementById('sort-select') as HTMLSelectElement;
-    const tagFilter = document.getElementById('tag-filter') as HTMLSelectElement;
-    const postsContainer = document.querySelector('.blog-posts-container');
-    
+  document.addEventListener("DOMContentLoaded", () => {
+    const sortSelect = document.getElementById(
+      "sort-select",
+    ) as HTMLSelectElement | null;
+    const tagFilter = document.getElementById(
+      "tag-filter",
+    ) as HTMLSelectElement | null;
+    const postsContainer = document.querySelector(".blog-posts-container");
+
     if (!postsContainer) return;
-    
+
     // Global state for search and filters
     const state = {
-      searchTerm: '',
-      sortBy: 'newest',
-      filterTag: ''
+      searchTerm: "",
+      sortBy: "newest",
+      filterTag: "",
+      filterYear: "",
     };
-    
+
     // Store original posts for reference
-    const allPosts = Array.from(document.querySelectorAll('.blog-post-card'));
-    
+    const allPosts = Array.from(document.querySelectorAll(".blog-post-card"));
+
     // Function to handle sorting and filtering
     function updatePosts() {
-      console.log(`Starting update. Filter tag: "${state.filterTag}", Search term: "${state.searchTerm}"`);
+      console.log(
+        `Starting update. Filter tag: "${state.filterTag}", Search term: "${state.searchTerm}"`,
+      );
       console.log(`Initial post count: ${allPosts.length}`);
-      
+
       // First determine which posts should be visible based on filters
-      const visiblePosts = allPosts.filter(post => {
+      const visiblePosts = allPosts.filter((post) => {
         // Check search term
-        const title = post.getAttribute('data-title')?.toLowerCase() || '';
-        const description = post.getAttribute('data-description')?.toLowerCase() || '';
-        const matchesSearch = state.searchTerm === '' || 
-                              title.includes(state.searchTerm) || 
-                              description.includes(state.searchTerm);
-        
+        const title = post.getAttribute("data-title")?.toLowerCase() || "";
+        const description =
+          post.getAttribute("data-description")?.toLowerCase() || "";
+        const matchesSearch =
+          state.searchTerm === "" ||
+          title.includes(state.searchTerm) ||
+          description.includes(state.searchTerm);
+
         // Check tag filter
         let matchesTag = true;
-        if (state.filterTag && state.filterTag !== '') {
-          const postTags = post.getAttribute('data-tags')?.split(',') || [];
+        if (state.filterTag && state.filterTag !== "") {
+          const postTags = post.getAttribute("data-tags")?.split(",") || [];
           matchesTag = postTags.includes(state.filterTag);
         }
-        
-        return matchesSearch && matchesTag;
+
+        // Check year filter
+        let matchesYear = true;
+        if (state.filterYear && state.filterYear !== "") {
+          const dateStr = post.getAttribute("data-date") || "";
+          const year = dateStr
+            ? new Date(dateStr).getFullYear().toString()
+            : "";
+          matchesYear = year === state.filterYear;
+        }
+
+        return matchesSearch && matchesTag && matchesYear;
       });
-      
+
       console.log(`Posts matching filters: ${visiblePosts.length}`);
-      
+
       // Hide all posts first
-      allPosts.forEach(post => {
+      allPosts.forEach((post) => {
         const postElement = post as HTMLElement;
-        const container = postElement.closest('li') || postElement;
-        container.style.display = 'none';
+        const container = postElement.closest("li") || postElement;
+        container.style.display = "none";
       });
-      
+
       // Apply sorting to visible posts
       visiblePosts.sort((a, b) => {
-        const dateA = new Date(a.getAttribute('data-date') || '').getTime();
-        const dateB = new Date(b.getAttribute('data-date') || '').getTime();
-        return state.sortBy === 'newest' ? dateB - dateA : dateA - dateB;
+        const dateA = new Date(a.getAttribute("data-date") || "").getTime();
+        const dateB = new Date(b.getAttribute("data-date") || "").getTime();
+        return state.sortBy === "newest" ? dateB - dateA : dateA - dateB;
       });
-      
+
       // Show sorted and filtered posts by reordering in the DOM
-      const safePostsContainer = postsContainer as HTMLElement;  // Cast to HTMLElement
+      const safePostsContainer = postsContainer as HTMLElement; // Cast to HTMLElement
       if (visiblePosts.length > 0 && safePostsContainer.children.length > 0) {
         // Get first post container to use as reference
-        const firstPostContainer = visiblePosts[0].closest('li') || visiblePosts[0];
+        const firstPostContainer =
+          visiblePosts[0].closest("li") || visiblePosts[0];
         const parentContainer = firstPostContainer.parentElement;
-        
+
         if (parentContainer) {
           // Move each visible post to maintain sort order
           visiblePosts.forEach((post, index) => {
-            const postContainer = (post.closest('li') || post) as HTMLElement;
-            postContainer.style.display = '';
-            
+            const postContainer = (post.closest("li") || post) as HTMLElement;
+            postContainer.style.display = "";
+
             // Add the posts in the correct order
             if (index === 0) {
-              // First post goes at the beginning 
+              // First post goes at the beginning
               parentContainer.prepend(postContainer);
             } else {
               // Others get placed after the previous one
-              const previousPost = visiblePosts[index-1];
-              const previousContainer = (previousPost.closest('li') || previousPost) as HTMLElement;
+              const previousPost = visiblePosts[index - 1];
+              const previousContainer = (previousPost.closest("li") ||
+                previousPost) as HTMLElement;
               previousContainer.after(postContainer);
             }
           });
         } else {
           // Fallback if we can't get parent container
-          visiblePosts.forEach(post => {
-            const postContainer = (post.closest('li') || post) as HTMLElement;
-            postContainer.style.display = '';
+          visiblePosts.forEach((post) => {
+            const postContainer = (post.closest("li") || post) as HTMLElement;
+            postContainer.style.display = "";
           });
         }
       }
-      
+
       // Show a message if no posts are found
-      const noResultsMessage = document.getElementById('no-results-message');
+      const noResultsMessage = document.getElementById("no-results-message");
       if (visiblePosts.length === 0 && !noResultsMessage) {
-        const message = document.createElement('div');
-        message.id = 'no-results-message';
-        message.className = 'bg-base-200 border-l-4 border-secondary w-full p-4 min-w-full mt-4';
+        const message = document.createElement("div");
+        message.id = "no-results-message";
+        message.className =
+          "bg-base-200 border-l-4 border-secondary w-full p-4 min-w-full mt-4";
         message.innerHTML = `
           <p class="font-bold">No posts found</p>
           <p>Try adjusting your search or filters to find what you're looking for.</p>
@@ -137,40 +155,63 @@ const { tags } = Astro.props;
       } else if (visiblePosts.length > 0 && noResultsMessage) {
         noResultsMessage.remove();
       }
-      
+
       // Log information for debugging
-      console.log(`Final display: ${visiblePosts.length} visible posts of ${allPosts.length} total`);
+      console.log(
+        `Final display: ${visiblePosts.length} visible posts of ${allPosts.length} total`,
+      );
       console.log(`Current sort order: ${state.sortBy}`);
     }
-    
+
     // Listen for search events from BlogSearch
-    document.addEventListener('blog:search', (e: CustomEvent) => {
+    document.addEventListener("blog:search", (e: CustomEvent) => {
       state.searchTerm = e.detail.searchTerm;
       updatePosts();
     });
-    
-    // Add event listeners for filters
-    sortSelect.addEventListener('change', () => {
-      state.sortBy = sortSelect.value;
-      console.log(`Sort changed to: ${state.sortBy}`);
+
+    // Add event listeners for filters (only if elements exist)
+    if (sortSelect) {
+      sortSelect.addEventListener("change", () => {
+        state.sortBy = sortSelect.value;
+        console.log(`Sort changed to: ${state.sortBy}`);
+        updatePosts();
+        // Notify other components that filters changed
+        document.dispatchEvent(
+          new CustomEvent("blog:filter", {
+            detail: { type: "sort", value: state.sortBy },
+          }),
+        );
+      });
+    }
+
+    if (tagFilter) {
+      tagFilter.addEventListener("change", () => {
+        state.filterTag = tagFilter.value;
+        console.log(`Tag filter changed to: "${state.filterTag}"`);
+        updatePosts();
+        // Notify other components that filters changed
+        document.dispatchEvent(
+          new CustomEvent("blog:filter", {
+            detail: { type: "tag", value: state.filterTag },
+          }),
+        );
+      });
+    }
+
+    // Listen for external filter set events from the sidebar
+    document.addEventListener("blog:set-filter", (e: CustomEvent) => {
+      const { type, value } = e.detail || {};
+      if (type === "tag") {
+        state.filterTag = value || "";
+      }
+      if (type === "year") {
+        state.filterYear = value || "";
+      }
       updatePosts();
-      // Notify other components that filters changed
-      document.dispatchEvent(new CustomEvent('blog:filter', {
-        detail: { type: 'sort', value: state.sortBy }
-      }));
     });
-    
-    tagFilter.addEventListener('change', () => {
-      state.filterTag = tagFilter.value;
-      console.log(`Tag filter changed to: "${state.filterTag}"`);
-      updatePosts();
-      // Notify other components that filters changed
-      document.dispatchEvent(new CustomEvent('blog:filter', {
-        detail: { type: 'tag', value: state.filterTag }
-      }));
-    });
-    
+
     // Initialize on page load
     updatePosts();
   });
-</script> 
+</script>
+

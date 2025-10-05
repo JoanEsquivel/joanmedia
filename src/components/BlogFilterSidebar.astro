@@ -1,0 +1,56 @@
+---
+interface Props {
+    tags: string[];
+    years: string[];
+    activeTag?: string;
+}
+
+const { tags, years, activeTag } = Astro.props;
+---
+
+<aside class="hidden md:block w-64 mr-8" aria-label="Filter Posts">
+    <div class="text-sm font-semibold mb-3">Filter Posts</div>
+
+    <div class="mb-6">
+        <div class="text-xs uppercase opacity-70 mb-2">By Tag</div>
+        <ul class="space-y-1">
+            <li>
+                <button
+                    class="link link-hover"
+                    onclick={"document.dispatchEvent(new CustomEvent('blog:set-filter',{detail:{type:'tag',value:''}}))"}
+                    >All Tags</button
+                >
+            </li>
+            {
+                tags.map((tag) => (
+                    <li>
+                        <button
+                            class={`link link-hover ${activeTag === tag ? "font-bold" : ""}`}
+                            onclick={`document.dispatchEvent(new CustomEvent('blog:set-filter',{detail:{type:'tag',value:'${tag}'}}))`}
+                        >
+                            {tag}
+                        </button>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+
+    <div>
+        <div class="text-xs uppercase opacity-70 mb-2">By Year</div>
+        <ul class="space-y-1">
+            {
+                years.map((y) => (
+                    <li>
+                        <button
+                            class="link link-hover"
+                            onclick={`document.dispatchEvent(new CustomEvent('blog:set-filter',{detail:{type:'year',value:'${y}'}}))`}
+                        >
+                            {y}
+                        </button>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</aside>
