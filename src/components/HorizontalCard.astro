@@ -12,10 +12,6 @@ const {
 } = Astro.props;
 const tag_url = url.split("/").slice(0, -1).join("/") + "/tag";
 
-// Debug log tags
-console.log(
-  `HorizontalCard: ${title} - Tags: ${tags ? JSON.stringify(tags) : "undefined"}`,
-);
 const formattedDate = pubDate
   ? new Date(pubDate).toLocaleDateString("en-US", {
       month: "long",
@@ -26,7 +22,7 @@ const formattedDate = pubDate
 ---
 
 <div
-  class="rounded-lg bg-base-100 hover:shadow-xl transition ease-in-out hover:scale-[102%] blog-post-card"
+  class="rounded-lg bg-base-100 shadow-sm border border-base-200 hover:shadow-xl hover:border-base-300 transition-all duration-300 hover:scale-[1.015] blog-post-card"
   data-title={title}
   data-description={desc}
   data-tags={tags && tags.length > 0 ? tags.join(",") : ""}
@@ -50,16 +46,16 @@ const formattedDate = pubDate
             <div class="text-xs opacity-70 mb-1">{formattedDate}</div>
           )
         }
-        <h1 class="text-xl font-bold">
+        <h2 class="text-xl font-bold">
           {title}
           {badge && <div class="badge badge-secondary mx-2">{badge}</div>}
-        </h1>
-        <p class="py-1 text-1xl">{desc}</p>
+        </h2>
+        <p class="py-1 text-base text-base-content/80">{desc}</p>
         <div class="card-actions justify-end">
           {
             tags &&
               tags.map((tag) => (
-                <a href={`${tag_url}/${tag}`} class="badge badge-outline">
+                <a href={`${tag_url}/${tag}`} class="badge badge-outline transition-colors duration-200 hover:badge-primary">
                   {tag}
                 </a>
               ))

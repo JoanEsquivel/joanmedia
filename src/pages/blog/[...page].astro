@@ -1,114 +1,55 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import HorizontalCard from "../../components/HorizontalCard.astro";
-import BlogSearch from "../../components/BlogSearch.astro";
-import BlogFilters from "../../components/BlogFilters.astro";
-import BlogFilterSidebar from "../../components/BlogFilterSidebar.astro";
+import BlogCard from "../../components/BlogCard.astro";
+import BlogFilterBar from "../../components/BlogFilterBar.astro";
 import { getCollection } from "astro:content";
 import createSlug from "../../lib/createSlug";
-import type { GetStaticPathsOptions, Page } from "astro";
-import type { CollectionEntry } from "astro:content";
+import type { GetStaticPathsOptions } from "astro";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getCollection("blog");
   posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-  return paginate(posts, { pageSize: 10 });
+  return paginate(posts, { pageSize: 999 });
 }
 
-const { page } = Astro.props as {
-  page: Page<CollectionEntry<"blog">>;
-};
+const { page } = Astro.props;
+const posts = page.data;
 
-// Extract all unique tags for filters
-const allTags = [
-  ...new Set(page.data.map((post) => post.data.tags || []).flat()),
-] as string[];
-
-// Years for sidebar
-const years = [
-  ...new Set(page.data.map((p) => p.data.pubDate.getFullYear().toString())),
-].sort((a, b) => Number(b) - Number(a));
+const allTags = [...new Set(posts.map((post: any) => post.data.tags || []).flat())] as string[];
+const allMonths = [...new Set(
+  posts.map((post: any) => {
+    const d = new Date(post.data.pubDate);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  })
+)].sort((a, b) => b.localeCompare(a));
 ---
 
-<BaseLayout title="Blog" sideBarActiveItemID="blog">
-  <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Latest Posts</div>
+<BaseLayout title="Blog" activeItemID="blog">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold tracking-tight">Blog</h1>
+    <p class="text-base-content/70 mt-2">Thoughts on testing, automation, and software quality.</p>
   </div>
 
-  <div class="flex">
-    <!-- <BlogFilterSidebar tags={allTags} years={years} /> -->
+  <BlogFilterBar allTags={allTags} allMonths={allMonths} />
 
-    <div class="flex-1">
-      <!-- Search and Filters -->
-      <div class="mb-6">
-        <BlogSearch />
-        <BlogFilters tags={allTags} />
-      </div>
-
-      {
-        page.data.length === 0 ? (
-          <div class="bg-base-200 border-l-4 border-secondary w-full p-4 min-w-full">
-            <p class="font-bold">Sorry!</p>
-            <p>
-              There are no blog posts to show at the moment. Check back later!
-            </p>
-          </div>
-        ) : (
-          <ul class="blog-posts-container space-y-6">
-            {page.data.map((post, index) => (
-              <li>
-                <HorizontalCard
-                  title={post.data.title}
-                  img={post.data.heroImage}
-                  desc={post.data.description}
-                  url={"/blog/" + createSlug(post.data.title, post.slug)}
-                  target="_self"
-                  badge={post.data.badge}
-                  tags={post.data.tags}
-                  pubDate={post.data.pubDate.toISOString()}
-                />
-                {index < page.data.length - 1 && <div class="divider my-2" />}
-              </li>
-            ))}
-          </ul>
-        )
-      }
-
-      <!-- Numbered pagination -->
-      <div class="flex items-center justify-center gap-2 mt-8">
-        {
-          page.url.prev ? (
-            <a href={page.url.prev} class="btn btn-sm">
-              ‹
-            </a>
-          ) : (
-            <button class="btn btn-sm" disabled>
-              ‹
-            </button>
-          )
-        }
-        {
-          Array.from({ length: page.lastPage }, (_, i) => i + 1).map((n) => (
-            <a
-              href={n === 1 ? "/blog" : `/blog/page/${n}`}
-              class={`btn btn-sm ${n === page.currentPage ? "btn-primary" : ""}`}
-            >
-              {n}
-            </a>
-          ))
-        }
-        {
-          page.url.next ? (
-            <a href={page.url.next} class="btn btn-sm">
-              ›
-            </a>
-          ) : (
-            <button class="btn btn-sm" disabled>
-              ›
-            </button>
-          )
-        }
-      </div>
+  {posts.length === 0 ? (
+    <div class="bg-base-200 border-l-4 border-secondary w-full p-4">
+      <p class="font-bold">Sorry!</p>
+      <p>There are no blog posts to show at the moment. Check back later!</p>
     </div>
-  </div>
+  ) : (
+    <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map((post: any) => (
+        <BlogCard
+          title={post.data.title}
+          img={post.data.heroImage}
+          desc={post.data.description}
+          url={"/blog/" + createSlug(post.data.title, post.slug)}
+          badge={post.data.badge}
+          tags={post.data.tags}
+          pubDate={post.data.pubDate.toISOString()}
+        />
+      ))}
+    </div>
+  )}
 </BaseLayout>

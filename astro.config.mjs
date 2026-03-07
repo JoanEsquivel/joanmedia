@@ -6,5 +6,12 @@ import tailwind from "@astrojs/tailwind";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://www.joanmedia.dev',
-  integrations: [mdx(), sitemap(), tailwind()]
+  integrations: [mdx(), sitemap(), tailwind()],
+  image: {
+    domains: [
+      'images.unsplash.com',
+      'logowik.com',
+      'www.w3.org',
+    ],
+  },
 });

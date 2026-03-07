@@ -1,0 +1,252 @@
+---
+interface Props {
+  allTags?: string[];
+  allMonths?: string[];
+}
+
+const { allTags = [], allMonths = [] } = Astro.props;
+---
+
+<div class="bg-base-200 rounded-xl p-4 mb-8" role="search" aria-label="Filter blog posts">
+  <div class="flex flex-col gap-4">
+    <!-- Search -->
+    <label for="blog-search" class="sr-only">Search blog posts</label>
+    <input
+      type="search"
+      id="blog-search"
+      placeholder="Search posts..."
+      class="input input-bordered w-full"
+      autocomplete="off"
+    />
+
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- Month filter -->
+      {allMonths.length > 0 && (
+        <div>
+          <label for="blog-month-filter" class="sr-only">Filter by month</label>
+          <select id="blog-month-filter" class="select select-bordered select-sm">
+            <option value="">All months</option>
+            {allMonths.map((m: string) => {
+              const [year, month] = m.split("-");
+              const label = new Date(parseInt(year), parseInt(month) - 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+              return <option value={m}>{label}</option>;
+            })}
+          </select>
+        </div>
+      )}
+
+      <!-- Tag pills -->
+      {allTags.length > 0 && (
+        <div class="flex flex-wrap gap-2" id="blog-tag-filters" role="group" aria-label="Filter by tag">
+          {allTags.map((tag: string) => (
+            <button
+              class="badge badge-outline badge-lg cursor-pointer hover:badge-primary transition-colors duration-200"
+              data-tag={tag.toLowerCase()}
+              aria-pressed="false"
+              aria-label={`Filter by tag: ${tag}`}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <!-- Active filters indicator (live region) -->
+    <div id="active-filters" class="hidden items-center gap-2 text-sm text-base-content/70" aria-live="polite">
+      <span id="filter-count"></span>
+      <button id="clear-filters" class="btn btn-ghost btn-xs">Clear all</button>
+    </div>
+  </div>
+</div>
+
+<!-- No results message (live region) -->
+<div id="no-results" class="hidden text-center py-12" role="status" aria-live="polite">
+  <p class="text-xl font-semibold mb-2">No posts found</p>
+  <p class="text-base-content/70 mb-4">Try adjusting your filters or search term.</p>
+  <button id="no-results-clear" class="btn btn-primary btn-sm">Clear filters</button>
+</div>
+
+<!-- Pagination container -->
+<nav id="blog-pagination" class="flex items-center justify-center gap-2 mt-8" aria-label="Blog pagination"></nav>
+
+<script>
+  function initBlogFilters() {
+    const searchInput = document.getElementById('blog-search') as HTMLInputElement;
+    const monthSelect = document.getElementById('blog-month-filter') as HTMLSelectElement;
+    const tagButtons = document.querySelectorAll('#blog-tag-filters button');
+    const activeFiltersEl = document.getElementById('active-filters');
+    const filterCountEl = document.getElementById('filter-count');
+    const clearBtn = document.getElementById('clear-filters');
+    const noResults = document.getElementById('no-results');
+    const noResultsClear = document.getElementById('no-results-clear');
+    const paginationEl = document.getElementById('blog-pagination');
+    const cards = document.querySelectorAll('.blog-card');
+
+    if (!cards.length) return;
+
+    const POSTS_PER_PAGE = 6;
+    let searchTerm = '';
+    let selectedTag = '';
+    let selectedMonth = '';
+    let currentPage = 1;
+
+    let debounceTimer: ReturnType<typeof setTimeout>;
+
+    function applyFilters() {
+      const filtered: Element[] = [];
+
+      cards.forEach((card) => {
+        const el = card as HTMLElement;
+        const title = el.dataset.title || '';
+        const desc = el.dataset.description || '';
+        const tags = el.dataset.tags || '';
+        const month = el.dataset.month || '';
+
+        const matchesSearch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm);
+        const matchesTag = !selectedTag || tags.split(',').includes(selectedTag);
+        const matchesMonth = !selectedMonth || month === selectedMonth;
+
+        if (matchesSearch && matchesTag && matchesMonth) {
+          filtered.push(card);
+        }
+      });
+
+      // Pagination
+      const totalPages = Math.max(1, Math.ceil(filtered.length / POSTS_PER_PAGE));
+      if (currentPage > totalPages) currentPage = 1;
+      const start = (currentPage - 1) * POSTS_PER_PAGE;
+      const end = start + POSTS_PER_PAGE;
+      const visible = filtered.slice(start, end);
+
+      // Show/hide cards
+      cards.forEach((card) => {
+        const el = card as HTMLElement;
+        if (visible.includes(card)) {
+          el.classList.remove('hidden-card');
+          el.style.display = '';
+        } else {
+          el.classList.add('hidden-card');
+          el.style.display = 'none';
+        }
+      });
+
+      // No results
+      if (noResults) {
+        noResults.classList.toggle('hidden', filtered.length > 0);
+      }
+
+      // Grid container visibility
+      const grid = document.getElementById('blog-grid');
+      if (grid) {
+        grid.classList.toggle('hidden', filtered.length === 0);
+      }
+
+      // Active filters indicator
+      const hasFilters = searchTerm || selectedTag || selectedMonth;
+      if (activeFiltersEl) {
+        activeFiltersEl.classList.toggle('hidden', !hasFilters);
+        activeFiltersEl.classList.toggle('flex', !!hasFilters);
+      }
+      if (filterCountEl) {
+        filterCountEl.textContent = `${filtered.length} post${filtered.length !== 1 ? 's' : ''} found`;
+      }
+
+      // Render pagination with ARIA
+      if (paginationEl) {
+        if (totalPages <= 1) {
+          paginationEl.innerHTML = '';
+        } else {
+          let html = '';
+          html += `<button class="btn btn-sm ${currentPage === 1 ? 'btn-disabled' : ''}" aria-label="Previous page" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>&lsaquo;</button>`;
+          for (let i = 1; i <= totalPages; i++) {
+            html += `<button class="btn btn-sm ${i === currentPage ? 'btn-primary' : ''}" aria-label="Page ${i}" ${i === currentPage ? 'aria-current="page"' : ''} data-page="${i}">${i}</button>`;
+          }
+          html += `<button class="btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}" aria-label="Next page" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>&rsaquo;</button>`;
+          paginationEl.innerHTML = html;
+
+          paginationEl.querySelectorAll('button').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const page = parseInt(btn.dataset.page || '1');
+              if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                applyFilters();
+              }
+            });
+          });
+        }
+      }
+    }
+
+    function clearAllFilters() {
+      searchTerm = '';
+      selectedTag = '';
+      selectedMonth = '';
+      currentPage = 1;
+      if (searchInput) searchInput.value = '';
+      if (monthSelect) monthSelect.value = '';
+      tagButtons.forEach((btn) => {
+        btn.classList.remove('badge-primary');
+        btn.classList.add('badge-outline');
+        btn.setAttribute('aria-pressed', 'false');
+      });
+      applyFilters();
+    }
+
+    // Search with debounce
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          searchTerm = searchInput.value.toLowerCase().trim();
+          currentPage = 1;
+          applyFilters();
+        }, 200);
+      });
+    }
+
+    // Month filter
+    if (monthSelect) {
+      monthSelect.addEventListener('change', () => {
+        selectedMonth = monthSelect.value;
+        currentPage = 1;
+        applyFilters();
+      });
+    }
+
+    // Tag pills
+    tagButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tag = (btn as HTMLElement).dataset.tag || '';
+        if (selectedTag === tag) {
+          selectedTag = '';
+          btn.classList.remove('badge-primary');
+          btn.classList.add('badge-outline');
+          btn.setAttribute('aria-pressed', 'false');
+        } else {
+          selectedTag = tag;
+          tagButtons.forEach((b) => {
+            b.classList.remove('badge-primary');
+            b.classList.add('badge-outline');
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.classList.add('badge-primary');
+          btn.classList.remove('badge-outline');
+          btn.setAttribute('aria-pressed', 'true');
+        }
+        currentPage = 1;
+        applyFilters();
+      });
+    });
+
+    // Clear buttons
+    if (clearBtn) clearBtn.addEventListener('click', clearAllFilters);
+    if (noResultsClear) noResultsClear.addEventListener('click', clearAllFilters);
+
+    // Initial render
+    applyFilters();
+  }
+
+  initBlogFilters();
+  document.addEventListener('astro:after-swap', initBlogFilters);
+</script>
