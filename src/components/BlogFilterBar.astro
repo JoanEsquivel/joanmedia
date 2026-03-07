@@ -7,17 +7,22 @@ interface Props {
 const { allTags = [], allMonths = [] } = Astro.props;
 ---
 
-<div class="bg-base-200 rounded-xl p-4 mb-8" role="search" aria-label="Filter blog posts">
+<div class="bg-base-200 rounded-2xl p-5 mb-8 shadow-sm" role="search" aria-label="Filter blog posts">
   <div class="flex flex-col gap-4">
-    <!-- Search -->
+    <!-- Search with icon -->
     <label for="blog-search" class="sr-only">Search blog posts</label>
-    <input
-      type="search"
-      id="blog-search"
-      placeholder="Search posts..."
-      class="input input-bordered w-full"
-      autocomplete="off"
-    />
+    <div class="relative">
+      <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+      </svg>
+      <input
+        type="search"
+        id="blog-search"
+        placeholder="Search posts..."
+        class="input input-bordered w-full pl-10"
+        autocomplete="off"
+      />
+    </div>
 
     <div class="flex flex-wrap items-center gap-3">
       <!-- Month filter -->
@@ -33,6 +38,11 @@ const { allTags = [], allMonths = [] } = Astro.props;
             })}
           </select>
         </div>
+      )}
+
+      <!-- Divider between month and tags -->
+      {allMonths.length > 0 && allTags.length > 0 && (
+        <div class="hidden sm:block w-px h-6 bg-base-content/20" aria-hidden="true"></div>
       )}
 
       <!-- Tag pills -->
@@ -55,13 +65,21 @@ const { allTags = [], allMonths = [] } = Astro.props;
     <!-- Active filters indicator (live region) -->
     <div id="active-filters" class="hidden items-center gap-2 text-sm text-base-content/70" aria-live="polite">
       <span id="filter-count"></span>
-      <button id="clear-filters" class="btn btn-ghost btn-xs">Clear all</button>
+      <button id="clear-filters" class="btn btn-ghost btn-xs gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        Clear all
+      </button>
     </div>
   </div>
 </div>
 
 <!-- No results message (live region) -->
-<div id="no-results" class="hidden text-center py-12" role="status" aria-live="polite">
+<div id="no-results" class="hidden text-center py-16" role="status" aria-live="polite">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4 text-base-content/30" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+  </svg>
   <p class="text-xl font-semibold mb-2">No posts found</p>
   <p class="text-base-content/70 mb-4">Try adjusting your filters or search term.</p>
   <button id="no-results-clear" class="btn btn-primary btn-sm">Clear filters</button>
@@ -74,30 +92,34 @@ const { allTags = [], allMonths = [] } = Astro.props;
   function initBlogFilters() {
     const searchInput = document.getElementById('blog-search') as HTMLInputElement;
     const monthSelect = document.getElementById('blog-month-filter') as HTMLSelectElement;
-    const tagButtons = document.querySelectorAll('#blog-tag-filters button');
+    const tagFiltersEl = document.getElementById('blog-tag-filters');
     const activeFiltersEl = document.getElementById('active-filters');
     const filterCountEl = document.getElementById('filter-count');
     const clearBtn = document.getElementById('clear-filters');
     const noResults = document.getElementById('no-results');
     const noResultsClear = document.getElementById('no-results-clear');
     const paginationEl = document.getElementById('blog-pagination');
-    const cards = document.querySelectorAll('.blog-card');
+    const cards = Array.from(document.querySelectorAll('.blog-card')) as HTMLElement[];
 
     if (!cards.length) return;
 
     const POSTS_PER_PAGE = 6;
+    const DEBOUNCE_MS = 200;
     let searchTerm = '';
     let selectedTag = '';
     let selectedMonth = '';
     let currentPage = 1;
-
+    let filteredCards: HTMLElement[] = [];
     let debounceTimer: ReturnType<typeof setTimeout>;
 
-    function applyFilters() {
-      const filtered: Element[] = [];
+    function setTagActive(btn: Element, active: boolean) {
+      btn.classList.toggle('badge-primary', active);
+      btn.classList.toggle('badge-outline', !active);
+      btn.setAttribute('aria-pressed', String(active));
+    }
 
-      cards.forEach((card) => {
-        const el = card as HTMLElement;
+    function filterCards(): HTMLElement[] {
+      return cards.filter((el) => {
         const title = el.dataset.title || '';
         const desc = el.dataset.description || '';
         const tags = el.dataset.tags || '';
@@ -107,89 +129,70 @@ const { allTags = [], allMonths = [] } = Astro.props;
         const matchesTag = !selectedTag || tags.split(',').includes(selectedTag);
         const matchesMonth = !selectedMonth || month === selectedMonth;
 
-        if (matchesSearch && matchesTag && matchesMonth) {
-          filtered.push(card);
-        }
+        return matchesSearch && matchesTag && matchesMonth;
       });
+    }
 
-      // Pagination
-      const totalPages = Math.max(1, Math.ceil(filtered.length / POSTS_PER_PAGE));
+    function renderPagination(totalPages: number) {
+      if (!paginationEl) return;
+      if (totalPages <= 1) {
+        paginationEl.innerHTML = '';
+        return;
+      }
+      let html = '';
+      html += `<button class="btn btn-sm ${currentPage === 1 ? 'btn-disabled' : ''}" aria-label="Previous page" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>&lsaquo;</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="btn btn-sm ${i === currentPage ? 'btn-primary' : ''}" aria-label="Page ${i}" ${i === currentPage ? 'aria-current="page"' : ''} data-page="${i}">${i}</button>`;
+      }
+      html += `<button class="btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}" aria-label="Next page" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>&rsaquo;</button>`;
+      paginationEl.innerHTML = html;
+    }
+
+    function renderPage() {
+      const totalPages = Math.max(1, Math.ceil(filteredCards.length / POSTS_PER_PAGE));
       if (currentPage > totalPages) currentPage = 1;
       const start = (currentPage - 1) * POSTS_PER_PAGE;
       const end = start + POSTS_PER_PAGE;
-      const visible = filtered.slice(start, end);
+      const visible = new Set(filteredCards.slice(start, end));
 
-      // Show/hide cards
-      cards.forEach((card) => {
-        const el = card as HTMLElement;
-        if (visible.includes(card)) {
-          el.classList.remove('hidden-card');
-          el.style.display = '';
-        } else {
-          el.classList.add('hidden-card');
-          el.style.display = 'none';
-        }
+      cards.forEach((el) => {
+        el.classList.toggle('hidden-card', !visible.has(el));
       });
 
-      // No results
       if (noResults) {
-        noResults.classList.toggle('hidden', filtered.length > 0);
+        noResults.classList.toggle('hidden', filteredCards.length > 0);
       }
 
-      // Grid container visibility
       const grid = document.getElementById('blog-grid');
       if (grid) {
-        grid.classList.toggle('hidden', filtered.length === 0);
+        grid.classList.toggle('hidden', filteredCards.length === 0);
       }
 
-      // Active filters indicator
       const hasFilters = searchTerm || selectedTag || selectedMonth;
       if (activeFiltersEl) {
         activeFiltersEl.classList.toggle('hidden', !hasFilters);
         activeFiltersEl.classList.toggle('flex', !!hasFilters);
       }
       if (filterCountEl) {
-        filterCountEl.textContent = `${filtered.length} post${filtered.length !== 1 ? 's' : ''} found`;
+        filterCountEl.textContent = `${filteredCards.length} post${filteredCards.length !== 1 ? 's' : ''} found`;
       }
 
-      // Render pagination with ARIA
-      if (paginationEl) {
-        if (totalPages <= 1) {
-          paginationEl.innerHTML = '';
-        } else {
-          let html = '';
-          html += `<button class="btn btn-sm ${currentPage === 1 ? 'btn-disabled' : ''}" aria-label="Previous page" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>&lsaquo;</button>`;
-          for (let i = 1; i <= totalPages; i++) {
-            html += `<button class="btn btn-sm ${i === currentPage ? 'btn-primary' : ''}" aria-label="Page ${i}" ${i === currentPage ? 'aria-current="page"' : ''} data-page="${i}">${i}</button>`;
-          }
-          html += `<button class="btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}" aria-label="Next page" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>&rsaquo;</button>`;
-          paginationEl.innerHTML = html;
+      renderPagination(totalPages);
+    }
 
-          paginationEl.querySelectorAll('button').forEach((btn) => {
-            btn.addEventListener('click', () => {
-              const page = parseInt(btn.dataset.page || '1');
-              if (page >= 1 && page <= totalPages) {
-                currentPage = page;
-                applyFilters();
-              }
-            });
-          });
-        }
-      }
+    function applyFilters() {
+      filteredCards = filterCards();
+      currentPage = 1;
+      renderPage();
     }
 
     function clearAllFilters() {
       searchTerm = '';
       selectedTag = '';
       selectedMonth = '';
-      currentPage = 1;
       if (searchInput) searchInput.value = '';
       if (monthSelect) monthSelect.value = '';
-      tagButtons.forEach((btn) => {
-        btn.classList.remove('badge-primary');
-        btn.classList.add('badge-outline');
-        btn.setAttribute('aria-pressed', 'false');
-      });
+      tagFiltersEl?.querySelectorAll('button').forEach((btn) => setTagActive(btn, false));
       applyFilters();
     }
 
@@ -199,9 +202,8 @@ const { allTags = [], allMonths = [] } = Astro.props;
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
           searchTerm = searchInput.value.toLowerCase().trim();
-          currentPage = 1;
           applyFilters();
-        }, 200);
+        }, DEBOUNCE_MS);
       });
     }
 
@@ -209,42 +211,49 @@ const { allTags = [], allMonths = [] } = Astro.props;
     if (monthSelect) {
       monthSelect.addEventListener('change', () => {
         selectedMonth = monthSelect.value;
-        currentPage = 1;
         applyFilters();
       });
     }
 
-    // Tag pills
-    tagButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
+    // Tag pills — event delegation
+    if (tagFiltersEl) {
+      tagFiltersEl.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('button[data-tag]');
+        if (!btn) return;
         const tag = (btn as HTMLElement).dataset.tag || '';
         if (selectedTag === tag) {
           selectedTag = '';
-          btn.classList.remove('badge-primary');
-          btn.classList.add('badge-outline');
-          btn.setAttribute('aria-pressed', 'false');
+          setTagActive(btn, false);
         } else {
+          tagFiltersEl.querySelectorAll('button').forEach((b) => setTagActive(b, false));
           selectedTag = tag;
-          tagButtons.forEach((b) => {
-            b.classList.remove('badge-primary');
-            b.classList.add('badge-outline');
-            b.setAttribute('aria-pressed', 'false');
-          });
-          btn.classList.add('badge-primary');
-          btn.classList.remove('badge-outline');
-          btn.setAttribute('aria-pressed', 'true');
+          setTagActive(btn, true);
         }
-        currentPage = 1;
         applyFilters();
       });
-    });
+    }
+
+    // Pagination — event delegation
+    if (paginationEl) {
+      paginationEl.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('button[data-page]');
+        if (!btn || btn.hasAttribute('disabled')) return;
+        const page = parseInt((btn as HTMLElement).dataset.page || '1');
+        const totalPages = Math.max(1, Math.ceil(filteredCards.length / POSTS_PER_PAGE));
+        if (page >= 1 && page <= totalPages) {
+          currentPage = page;
+          renderPage();
+        }
+      });
+    }
 
     // Clear buttons
     if (clearBtn) clearBtn.addEventListener('click', clearAllFilters);
     if (noResultsClear) noResultsClear.addEventListener('click', clearAllFilters);
 
     // Initial render
-    applyFilters();
+    filteredCards = filterCards();
+    renderPage();
   }
 
   initBlogFilters();

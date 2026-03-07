@@ -49,12 +49,6 @@ html {
 .animate-delay-300 { animation-delay: 0.3s; }
 .animate-delay-400 { animation-delay: 0.4s; }
 
-.blog-card {
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
 .blog-card.hidden-card {
-  opacity: 0;
-  position: absolute;
-  pointer-events: none;
+  display: none;
 }
