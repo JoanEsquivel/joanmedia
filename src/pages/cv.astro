@@ -3,49 +3,53 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import TimeLineElement from "../components/cv/TimeLine.astro";
 ---
 
-<BaseLayout title="Resume">
+<BaseLayout title="Resume" activeItemID="cv">
   <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Profile</div>
+    <h1 class="text-3xl w-full font-bold tracking-tight">Profile</h1>
   </div>
 
-  <div class="mb-10 text-justify">
+  <div class="mb-10 text-justify text-base-content/80 leading-relaxed">
     I have experience in infrastructure operations and digital projects. I am a
     self motivated professional always looking oportunities to help and improve.
-    I consider myself as a learner. I´ve made a positive impact working with
+    I consider myself as a learner. I've made a positive impact working with
     partners that have high level of importance such as Autodesk, Linksys,
-    Belkin,Citi retail services, Subaru, Microfocus, Accenture Search and
+    Belkin, Citi retail services, Subaru, Microfocus, Accenture Search and
     Content Analytics, and Shell.
   </div>
 
   <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Experience</div>
+    <h2 class="text-3xl w-full font-bold tracking-tight">Experience</h2>
   </div>
 
   <div class="time-line-container mb-10">
     <TimeLineElement
       title="Quality Assurance Engineer"
       subtitle="From 2023 at ImagineX"
-      desc="Industry: Analytics & Data"
-    />
+    >
+      Industry: Analytics & Data
+    </TimeLineElement>
     <TimeLineElement
       title="Senior Quality Assurance Automation Engineer"
       subtitle="From 2021 to 2023 at Accenture, San Jose, Costa Rica"
-      desc="Industry: Search & Content Analytics"
-    />
+    >
+      Industry: Search & Content Analytics
+    </TimeLineElement>
     <TimeLineElement
       title="QA Automation Engineer"
       subtitle="From 2020 to 2021 at Microfocus, San Jose, Costa Rica"
-      desc="Industry: Security analytics & forensic investigation tools"
-    />
+    >
+      Industry: Security analytics & forensic investigation tools
+    </TimeLineElement>
     <TimeLineElement
       title="QA Automation Engineer"
       subtitle="From 2017 to 2020 at Accenture, San Jose, Costa Rica"
-      desc="Industries: Retail and Consumer Goods - Banking and Financial Services"
-    />
+    >
+      Industries: Retail and Consumer Goods - Banking and Financial Services
+    </TimeLineElement>
   </div>
 
   <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Education</div>
+    <h2 class="text-3xl w-full font-bold tracking-tight">Education</h2>
   </div>
 
   <div class="time-line-container grid gap-4 mb-10">
@@ -60,7 +64,7 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
   </div>
 
   <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Certifications</div>
+    <h2 class="text-3xl w-full font-bold tracking-tight">Certifications</h2>
   </div>
 
   <ul class="list-disc mx-6 mb-10 grid gap-2">
@@ -68,26 +72,32 @@ import TimeLineElement from "../components/cv/TimeLine.astro";
       <a
         href="https://www.credly.com/badges/18c70723-359a-4850-9785-56a56a853429?source=linked_in_profile"
         target="_blank"
+        rel="noopener noreferrer"
+        class="link link-primary"
       >
-        Scrum Foundation Professional Certificate - SFPC™</a
-      >
+        Scrum Foundation Professional Certificate - SFPC
+      </a>
     </li>
   </ul>
 
   <div class="mb-5">
-    <div class="text-3xl w-full font-bold">Skills</div>
+    <h2 class="text-3xl w-full font-bold tracking-tight">Skills</h2>
   </div>
 
-  <ul class="list-disc md:columns-3 columns-2 mx-6">
-    <li>Spanish (Native)</li>
-    <li>English (Business)</li>
-    <li>Quality Assurance Management</li>
-    <li>Web Testing </li>
-    <li>Mobile Testing </li>
-    <li>API Testing </li>
-    <li>Performance Testing </li>
-    <li>Accessibility Testing</li>
-    <li>CI CD Tools</li>
-    <li>Cloud knowledge</li>
-  </ul>
+  <div class="flex flex-wrap gap-2">
+    {[
+      "Spanish (Native)",
+      "English (Business)",
+      "Quality Assurance Management",
+      "Web Testing",
+      "Mobile Testing",
+      "API Testing",
+      "Performance Testing",
+      "Accessibility Testing",
+      "CI/CD Tools",
+      "Cloud Knowledge",
+    ].map((skill) => (
+      <span class="badge badge-lg badge-outline">{skill}</span>
+    ))}
+  </div>
 </BaseLayout>

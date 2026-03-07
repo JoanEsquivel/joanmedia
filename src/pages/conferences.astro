@@ -2,196 +2,135 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<!-- 
-badge-primary - Primary theme color
-badge-secondary - Secondary theme color
-badge-accent - Accent theme color
-badge-neutral - Neutral color
-badge-info - Info/blue color
-badge-success - Success/green color
-badge-warning - Warning/yellow color
-badge-error - Error/red color
-
---- -->
-
-
-<BaseLayout title="Conferences" sideBarActiveItemID="services">
-  <div>
-    <div class="text-3xl w-full font-bold mb-5">Conferences</div>
+<BaseLayout title="Conferences" activeItemID="conferences">
+  <div class="mb-8">
+    <h1 class="text-4xl w-full font-bold tracking-tight">Conferences</h1>
+    <p class="text-base-content/70 mt-2">Talks and presentations at tech events around the world.</p>
   </div>
-  
-  <div class="overflow-x-auto">
-    <table class="table table-zebra w-full">
-      <thead>
-        <tr class="bg-base-200">
-          <th class="text-left font-bold text-base">Type</th>
-          <th class="text-left font-bold text-base">Name</th>
-          <th class="text-left font-bold text-base">Language</th>
-          <th class="text-left font-bold text-base">Video</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="hover:bg-base-100">
-          <td class="align-middle">
-            <div class="badge badge-primary badge-lg whitespace-nowrap px-3">Conference Talk</div>
-          </td>
-          <td class="align-middle">
-            <a 
-              href="https://automation.eurostarsoftwaretesting.com/event/2025/ensuring-data-integrity-great-expectations-python/" 
-              target="_blank" 
-              class="link link-primary font-medium hover:link-hover"
-            >
-              AutomationSTAR 2025 - Ensuring Data Integrity: Great Expectations + Python
-            </a>
-          </td>
-          <td class="align-middle">
-            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">English</div>
-          </td>
-          <td class="align-middle">
-            <span class="text-gray-500 italic">Not available yet</span>
-          </td>
-        </tr>
 
-        <tr class="hover:bg-base-100">
-          <td class="align-middle">
-            <div class="badge badge-primary badge-lg whitespace-nowrap px-3">Conference Talk</div>
-          </td>
-          <td class="align-middle">
-            <a 
-              href="https://www.linkedin.com/posts/pylatam_testing-playwright-selenium-activity-7357515549003706368-Zuwb?utm_source=share&utm_medium=member_desktop&rcm=ACoAABgpv8UBGdi5eDph0_wFDz7EGkyV3FrhZ7Q" 
-              target="_blank" 
-              class="link link-primary font-medium hover:link-hover"
-            >
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+    <!-- AutomationSTAR 2025 -->
+    <div class="card bg-base-200 shadow-md hover:shadow-xl transition-all duration-300">
+      <div class="card-body">
+        <div class="flex flex-wrap gap-2 mb-2">
+          <div class="badge badge-primary">Conference Talk</div>
+          <div class="badge badge-outline">English</div>
+        </div>
+        <h2 class="card-title text-lg">
+          <a href="https://automation.eurostarsoftwaretesting.com/event/2025/ensuring-data-integrity-great-expectations-python/" target="_blank" rel="noopener noreferrer" class="link link-hover hover:text-primary">
+            AutomationSTAR 2025 - Ensuring Data Integrity: Great Expectations + Python
+          </a>
+        </h2>
+        <div class="card-actions justify-end mt-4">
+          <span class="text-sm text-base-content/70 italic">Video not available yet</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PyCon Latam 2025 -->
+    <div class="card bg-base-200 shadow-md hover:shadow-xl transition-all duration-300">
+      <div class="card-body">
+        <div class="flex flex-wrap gap-2 mb-2">
+          <div class="badge badge-primary">Conference Talk</div>
+          <div class="badge badge-outline">Spanish</div>
+        </div>
+        <h2 class="card-title text-lg">
+          <a href="https://www.linkedin.com/posts/pylatam_testing-playwright-selenium-activity-7357515549003706368-Zuwb?utm_source=share&utm_medium=member_desktop&rcm=ACoAABgpv8UBGdi5eDph0_wFDz7EGkyV3FrhZ7Q" target="_blank" rel="noopener noreferrer" class="link link-hover hover:text-primary">
             PyCon Latam 2025 - Automated E2E testing with Playwright and Python
-            </a>
-          </td>
-          <td class="align-middle">
-            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">Spanish</div>
-          </td>
-          <td class="align-middle">
-            <span class="text-gray-500 italic">Not available yet</span>
-          </td>
-        </tr>
-        
-        <tr class="hover:bg-base-100">
-          <td class="align-middle">
-            <div class="badge badge-primary badge-lg whitespace-nowrap px-3">Conference Talk</div>
-          </td>
-          <td class="align-middle">
-            <a 
-              href="https://us.pycon.org/2025/schedule/presentation/94/" 
-              target="_blank" 
-              class="link link-primary font-medium hover:link-hover"
-            >
-              PyCon US 2025 - Automated E2E testing with Playwright and Python
-            </a>
-          </td>
-          <td class="align-middle">
-            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">Spanish</div>
-          </td>
-          <td class="align-middle">
-            <a 
-              href="https://www.youtube.com/watch?v=G7SzmAO_JbA&t=858s&ab_channel=PyConUS" 
-              target="_blank" 
-              class="btn btn-sm btn-outline btn-primary"
-            >
-              Watch Video
-            </a>
-          </td>
-        </tr>
-        
-        <tr class="hover:bg-base-100">
-          <td class="align-middle">
-            <div class="badge badge-primary badge-lg whitespace-nowrap px-3">Conference Talk</div>
-          </td>
-          <td class="align-middle">
-            <a 
-              href="https://2024.pycon.co/en/talks/10" 
-              target="_blank" 
-              class="link link-primary font-medium hover:link-hover"
-            >
-              PyCon Colombia 2024 - Automated E2E testing with Playwright and Python
-            </a>
-          </td>
-          <td class="align-middle">
-            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">Spanish</div>
-          </td>
-          <td class="align-middle">
-            <span class="text-gray-500 italic">The organization has not provided the video yet</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </a>
+        </h2>
+        <div class="card-actions justify-end mt-4">
+          <span class="text-sm text-base-content/70 italic">Video not available yet</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PyCon US 2025 -->
+    <div class="card bg-base-200 shadow-md hover:shadow-xl transition-all duration-300">
+      <div class="card-body">
+        <div class="flex flex-wrap gap-2 mb-2">
+          <div class="badge badge-primary">Conference Talk</div>
+          <div class="badge badge-outline">Spanish</div>
+        </div>
+        <h2 class="card-title text-lg">
+          <a href="https://us.pycon.org/2025/schedule/presentation/94/" target="_blank" rel="noopener noreferrer" class="link link-hover hover:text-primary">
+            PyCon US 2025 - Automated E2E testing with Playwright and Python
+          </a>
+        </h2>
+        <div class="card-actions justify-end mt-4">
+          <a href="https://www.youtube.com/watch?v=G7SzmAO_JbA&t=858s&ab_channel=PyConUS" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline btn-primary">
+            Watch Video
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- PyCon Colombia 2024 -->
+    <div class="card bg-base-200 shadow-md hover:shadow-xl transition-all duration-300">
+      <div class="card-body">
+        <div class="flex flex-wrap gap-2 mb-2">
+          <div class="badge badge-primary">Conference Talk</div>
+          <div class="badge badge-outline">Spanish</div>
+        </div>
+        <h2 class="card-title text-lg">
+          <a href="https://2024.pycon.co/en/talks/10" target="_blank" rel="noopener noreferrer" class="link link-hover hover:text-primary">
+            PyCon Colombia 2024 - Automated E2E testing with Playwright and Python
+          </a>
+        </h2>
+        <div class="card-actions justify-end mt-4">
+          <span class="text-sm text-base-content/70 italic">Video not provided by organizers</span>
+        </div>
+      </div>
+    </div>
   </div>
-  
+
   <!-- Interviews Section -->
-  <div class="mt-12">
-    <div class="text-3xl w-full font-bold mb-5">Interviews</div>
+  <div class="mb-8">
+    <h2 class="text-4xl w-full font-bold tracking-tight">Interviews</h2>
+    <p class="text-base-content/70 mt-2">Guest appearances and conversations about QA and testing.</p>
   </div>
-  
-  <div class="overflow-x-auto">
-    <table class="table table-zebra w-full">
-      <thead>
-        <tr class="bg-base-200">
-          <th class="text-left font-bold text-base">Type</th>
-          <th class="text-left font-bold text-base">Name</th>
-          <th class="text-left font-bold text-base">Language</th>
-          <th class="text-left font-bold text-base">Video</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="hover:bg-base-100">
-          <td class="align-middle">
-            <div class="badge badge-accent badge-lg whitespace-nowrap px-3">Interview</div>
-          </td>
-          <td class="align-middle">
-            <span class="font-medium">
-              ¿Cómo es el testing de software en Costa Rica 🇨🇷? Feat @JoanMediaES @joanmedia
-            </span>
-          </td>
-          <td class="align-middle">
-            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">Spanish</div>
-          </td>
-          <td class="align-middle">
-            <a 
-              href="https://www.youtube.com/watch?v=bEB_KkapOJ8&ab_channel=TheFreeRangeTester" 
-              target="_blank" 
-              class="btn btn-sm btn-outline btn-primary"
-            >
-              Watch Video
-            </a>
-          </td>
-        </tr>
-        
-        <tr class="hover:bg-base-100">
-          <td class="align-middle">
-            <div class="badge badge-accent badge-lg whitespace-nowrap px-3">Interview</div>
-          </td>
-          <td class="align-middle">
-            <span class="font-medium">
-              Entrevistas Testarudas invitado especial Joan Esquivel creador de @joanmedia @JoanMediaES
-            </span>
-          </td>
-          <td class="align-middle">
-            <div class="badge badge-outline badge-lg whitespace-nowrap px-3">Spanish</div>
-          </td>
-          <td class="align-middle">
-            <a 
-              href="https://www.youtube.com/watch?v=d7eHT2uhqpI&ab_channel=TesterTestarudo" 
-              target="_blank" 
-              class="btn btn-sm btn-outline btn-primary"
-            >
-              Watch Video
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <!-- Interview 1 -->
+    <div class="card bg-base-200 shadow-md hover:shadow-xl transition-all duration-300">
+      <div class="card-body">
+        <div class="flex flex-wrap gap-2 mb-2">
+          <div class="badge badge-accent">Interview</div>
+          <div class="badge badge-outline">Spanish</div>
+        </div>
+        <h2 class="card-title text-lg">
+          Como es el testing de software en Costa Rica? Feat @JoanMediaES
+        </h2>
+        <div class="card-actions justify-end mt-4">
+          <a href="https://www.youtube.com/watch?v=bEB_KkapOJ8&ab_channel=TheFreeRangeTester" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline btn-primary">
+            Watch Video
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interview 2 -->
+    <div class="card bg-base-200 shadow-md hover:shadow-xl transition-all duration-300">
+      <div class="card-body">
+        <div class="flex flex-wrap gap-2 mb-2">
+          <div class="badge badge-accent">Interview</div>
+          <div class="badge badge-outline">Spanish</div>
+        </div>
+        <h2 class="card-title text-lg">
+          Entrevistas Testarudas invitado especial Joan Esquivel creador de @joanmedia
+        </h2>
+        <div class="card-actions justify-end mt-4">
+          <a href="https://www.youtube.com/watch?v=d7eHT2uhqpI&ab_channel=TesterTestarudo" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline btn-primary">
+            Watch Video
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
-  
-  <div class="mt-8 p-4 bg-base-200 rounded-lg">
-    <p class="text-sm text-gray-600">
-      <strong>Note:</strong> Video recordings will be added after the conferences take place. 
+
+  <div class="p-4 bg-base-200 rounded-lg">
+    <p class="text-sm text-base-content/70">
+      <strong>Note:</strong> Video recordings will be added after the conferences take place.
       Check back later for updates!
     </p>
   </div>

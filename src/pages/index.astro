@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import HorizontalCard from "../components/HorizontalCard.astro";
+import BlogCard from "../components/BlogCard.astro";
+import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import createSlug from "../lib/createSlug";
 
@@ -8,61 +9,59 @@ const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 
-const last_posts = posts.slice(0, 2);
+const last_posts = posts.slice(0, 3);
 ---
 
-<BaseLayout sideBarActiveItemID="home">
-  <div class="pb-12 mt-5">
-    <div class="text-xl py-1">Hey masters 👋</div>
-    <div class="text-5xl font-bold">I'm Joan Esquivel</div>
-    <div class="text-3xl py-3 font-bold">Software QA Engineer</div>
-    <div class="py-2">
-      <text class="text-lg">
-        You will find my projects, conferences, and products in this website. I
-        hope you enjoy it!
-      </text>
-    </div>
-    <div class="mt-8">
-      <a
-        class="btn"
-        href="https://www.linkedin.com/in/joanesquivel/"
-        target="_blank"
-      >
-        Let's connect in LinkedIn!</a
-      >
-      <a
-        href="https://www.youtube.com/@joanmedia"
-        target="_blank"
-        class="btn btn-outline ml-5"
-      >
-        Check my YT Channel
-      </a>
+<BaseLayout activeItemID="home">
+  <div class="pb-16 mt-8">
+    <div class="flex flex-col items-center text-center md:items-start md:text-left">
+      <div class="avatar mb-6 animate-fade-in-up">
+        <div class="w-28 h-28 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+          <Image src="/profile.jpg" alt="Joan Esquivel" width={112} height={112} format="webp" />
+        </div>
+      </div>
+      <div class="text-xl py-1 text-base-content/70 animate-fade-in-up animate-delay-100">Hey there!</div>
+      <h1 class="text-5xl md:text-6xl font-bold tracking-tight animate-fade-in-up animate-delay-200">I'm Joan Esquivel</h1>
+      <div class="text-xl md:text-2xl py-3 font-bold text-primary animate-fade-in-up animate-delay-200">Software QA Engineer</div>
+      <p class="py-2 text-base-content/70 max-w-2xl leading-relaxed animate-fade-in-up animate-delay-300">
+        You will find my conferences, blog posts, and professional journey on this website.
+        I'm passionate about quality engineering, test automation, and sharing knowledge with the community.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3 animate-fade-in-up animate-delay-400">
+        <a class="btn btn-primary" href="https://www.linkedin.com/in/joanesquivel/" target="_blank" rel="noopener noreferrer">
+          Let's Connect
+        </a>
+        <a class="btn btn-outline" href="mailto:contact.manuelernestog@gmail.com">
+          Email Me
+        </a>
+        <a class="btn btn-ghost" href="/blog/">
+          Read the Blog
+        </a>
+      </div>
     </div>
   </div>
-
-  <!-- <div>
-    <div class="text-3xl w-full font-bold mb-2">My last projects {"</>"}</div>
-  </div> -->
 
   <div class="divider my-0"></div>
 
   <div>
-    <div class="text-3xl w-full font-bold mb-5 mt-10">Latest from blog</div>
+    <h2 class="text-3xl w-full font-bold mb-6 mt-10 tracking-tight">Latest from the Blog</h2>
   </div>
 
-  {
-    last_posts.map((post) => (
-      <>
-        <HorizontalCard
-          title={post.data.title}
-          img={post.data.heroImage}
-          desc={post.data.description}
-          url={"/blog/" + createSlug(post.data.title, post.slug)}
-          target="_self"
-          badge={post.data.badge}
-        />
-        <div class="divider my-0" />
-      </>
-    ))
-  }
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {last_posts.map((post) => (
+      <BlogCard
+        title={post.data.title}
+        img={post.data.heroImage}
+        desc={post.data.description}
+        url={"/blog/" + createSlug(post.data.title, post.slug)}
+        badge={post.data.badge}
+        tags={post.data.tags}
+        pubDate={post.data.pubDate.toISOString()}
+      />
+    ))}
+  </div>
+
+  <div class="mt-8 text-center">
+    <a href="/blog/" class="btn btn-ghost">View all posts<span aria-hidden="true"> &rarr;</span></a>
+  </div>
 </BaseLayout>
