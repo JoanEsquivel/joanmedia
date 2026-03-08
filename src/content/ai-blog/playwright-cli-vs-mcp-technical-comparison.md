@@ -2,7 +2,7 @@
 title: "CLI vs MCP: The Technical Comparison for Playwright Browser Automation"
 description: "A data-driven comparison of Playwright CLI and MCP architectures, covering token efficiency, command coverage, determinism, and when to use each approach."
 pubDate: 2026-03-12
-heroImage: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=750&h=422&fit=crop"
+heroImage: "https://images.unsplash.com/photo-1429743305873-d4065c15f93e?w=750&h=422&fit=crop"
 category: "qa"
 tags:
   - Playwright

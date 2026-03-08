@@ -2,7 +2,7 @@
 title: "Agentic Prompt Engineering: Tool Use, Planning, Safety, and Production Patterns"
 description: "Master agentic prompt engineering with proven patterns for tool design, planning strategies, state management, and multi-layered safety for production AI agents."
 pubDate: 2026-03-09
-heroImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=750&h=422&fit=crop"
+heroImage: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=750&h=422&fit=crop"
 category: "ai"
 tags:
   - Prompt Engineering

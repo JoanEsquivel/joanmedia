@@ -2,7 +2,7 @@
 title: "What Is Playwright CLI and Why It Changes Browser Automation for AI Agents"
 description: "Discover how Playwright CLI reduces token consumption by 4-10x compared to MCP by saving browser state to disk instead of the model's context window."
 pubDate: 2026-03-12
-heroImage: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=750&h=422&fit=crop"
+heroImage: "https://images.unsplash.com/photo-1643116774075-acc00caa9a7b?w=750&h=422&fit=crop"
 category: "qa"
 tags:
   - Playwright

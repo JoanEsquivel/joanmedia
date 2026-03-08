@@ -2,7 +2,7 @@
 title: "Where Do All the Tokens Go? The Anatomy of Context Consumption and Failure"
 description: "Explore the six sources of token consumption in AI agents, why costs compound quadratically, and five failure modes that degrade performance as context grows."
 pubDate: 2026-03-08
-heroImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=750&h=422&fit=crop"
+heroImage: "https://images.unsplash.com/photo-1616957348089-3814b5e9c5aa?w=750&h=422&fit=crop"
 category: "ai"
 tags:
   - Context Engineering

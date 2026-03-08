@@ -2,7 +2,7 @@
 title: "Configuring MCP Servers in Claude Code"
 description: "A step-by-step guide to adding, managing, and scoping MCP servers in Claude Code, with a migration cheat sheet for developers coming from Cursor."
 pubDate: 2026-03-10
-heroImage: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=750&h=422&fit=crop"
+heroImage: "https://images.unsplash.com/photo-1506399309177-3b43e99fead2?w=750&h=422&fit=crop"
 category: "ai"
 tags:
   - MCP

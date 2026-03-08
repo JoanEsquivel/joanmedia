@@ -2,7 +2,7 @@
 title: "From Prompt Engineering to Context Engineering"
 description: "Explore how context engineering expands prompt engineering by optimizing what information LLMs see, covering compaction, sub-agents, and production strategies."
 pubDate: 2026-03-09
-heroImage: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=750&h=422&fit=crop"
+heroImage: "https://images.unsplash.com/photo-1644088379091-d574269d422f?w=750&h=422&fit=crop"
 category: "ai"
 tags:
   - Prompt Engineering
