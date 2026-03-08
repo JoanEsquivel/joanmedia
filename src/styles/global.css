@@ -52,3 +52,7 @@ html {
 .blog-card.hidden-card {
   display: none;
 }
+
+.ai-blog-card.hidden-card {
+  display: none;
+}

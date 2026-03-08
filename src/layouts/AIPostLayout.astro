@@ -1,0 +1,98 @@
+---
+import { type AIBlogSchema } from "../content/config";
+import BaseLayout from "./BaseLayout.astro";
+import AIBlogCategoryPill from "../components/AIBlogCategoryPill.astro";
+import AIBlogSourcesList from "../components/AIBlogSourcesList.astro";
+import AIBlogSeriesNav from "../components/AIBlogSeriesNav.astro";
+import { Image } from "astro:assets";
+import { AI_BLOG_CATEGORIES, type AIBlogCategory } from "../lib/aiBlogCategories";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+
+interface SeriesPost {
+  title: string;
+  url: string;
+  order: number;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: string;
+  heroImage?: string;
+  badge?: string;
+  category: AIBlogCategory;
+  tags?: string[];
+  sources?: Array<{ title: string; url: string; accessDate?: string }>;
+  sourceNotes?: string;
+  seriesName?: string;
+  seriesOrder?: number;
+  seriesPosts?: SeriesPost[];
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  badge,
+  category,
+  tags = [],
+  sources,
+  sourceNotes,
+  seriesName,
+  seriesOrder,
+  seriesPosts,
+} = Astro.props;
+
+dayjs.extend(localizedFormat);
+const displayDate = dayjs(pubDate).format("ll");
+const cat = AI_BLOG_CATEGORIES[category];
+---
+
+<BaseLayout title={title} description={description} image={heroImage} ogType="article" activeItemID="ai-blog">
+  <div class="max-w-3xl mx-auto">
+    <nav aria-label="Breadcrumb" class="text-sm breadcrumbs mb-4">
+      <ul>
+        <li><a href="/ai-blog/">AI Blog</a></li>
+        <li><a href={`/ai-blog/category/${category}/`}>{cat.label}</a></li>
+        <li><span class="text-base-content/70">{title}</span></li>
+      </ul>
+    </nav>
+
+    <a href="/ai-blog/" class="btn btn-ghost btn-sm mb-6"><span aria-hidden="true">&larr;</span> Back to AI Blog</a>
+
+    <article class="prose prose-lg max-w-none prose-img:mx-auto prose-headings:tracking-tight prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
+      {heroImage && <Image width={750} height={422} format="webp" src={heroImage} alt={title} class="w-full mb-6 rounded-lg" />}
+      <div class="flex items-center gap-2 mb-2 not-prose">
+        <AIBlogCategoryPill category={category} isActive />
+      </div>
+      <h1 class="title my-2 text-4xl font-bold">{title}</h1>
+      {pubDate && <time datetime={pubDate.toISOString()} class="text-base-content/70">{displayDate}</time>}
+      <br />
+      {badge && <div class="badge badge-secondary my-1">{badge}</div>}
+      {tags.map((tag) => (
+        <a href={`/ai-blog/tag/${tag}`} class="badge badge-outline ml-2 no-underline hover:badge-primary transition-colors duration-200">
+          {tag}
+        </a>
+      ))}
+      {updatedDate && (
+        <div>
+          Last updated on <time>{updatedDate}</time>
+        </div>
+      )}
+      <div class="divider my-2"></div>
+      <slot />
+    </article>
+
+    {sources && sources.length > 0 && (
+      <AIBlogSourcesList sources={sources} notes={sourceNotes} />
+    )}
+
+    {seriesName && seriesOrder && seriesPosts && seriesPosts.length > 0 && (
+      <AIBlogSeriesNav seriesName={seriesName} currentOrder={seriesOrder} posts={seriesPosts} />
+    )}
+  </div>
+</BaseLayout>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BlogCard from "../components/BlogCard.astro";
+import AIBlogCard from "../components/AIBlogCard.astro";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import createSlug from "../lib/createSlug";
@@ -10,6 +11,12 @@ const posts = (await getCollection("blog")).sort(
 );
 
 const last_posts = posts.slice(0, 3);
+
+const aiPosts = (await getCollection("ai-blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const last_ai_posts = aiPosts.slice(0, 3);
 ---
 
 <BaseLayout activeItemID="home">
@@ -63,5 +70,30 @@ const last_posts = posts.slice(0, 3);
 
   <div class="mt-8 text-center">
     <a href="/blog/" class="btn btn-ghost">View all posts<span aria-hidden="true"> &rarr;</span></a>
+  </div>
+
+  <div class="divider my-0"></div>
+
+  <div>
+    <h2 class="text-3xl w-full font-bold mb-6 mt-10 tracking-tight">Latest AI Research</h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {last_ai_posts.map((post) => (
+      <AIBlogCard
+        title={post.data.title}
+        img={post.data.heroImage}
+        desc={post.data.description}
+        url={"/ai-blog/" + createSlug(post.data.title, post.slug)}
+        badge={post.data.badge}
+        tags={post.data.tags}
+        pubDate={post.data.pubDate.toISOString()}
+        category={post.data.category}
+      />
+    ))}
+  </div>
+
+  <div class="mt-8 text-center">
+    <a href="/ai-blog/" class="btn btn-ghost">View all AI research<span aria-hidden="true"> &rarr;</span></a>
   </div>
 </BaseLayout>

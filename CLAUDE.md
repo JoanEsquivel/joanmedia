@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4 pages: Home, Conferences, Blog, and CV. Built with Astro, styled with TailwindCSS v3 + DaisyUI v4, using a top navbar layout with dark/light theme toggle.
+Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 5 pages: Home, Conferences, Blog, AI Blog, and CV. Built with Astro, styled with TailwindCSS v3 + DaisyUI v4, using a top navbar layout with dark/light theme toggle.
 
 ## Development Commands
 
@@ -24,17 +24,20 @@ Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4
 
 ### Project Structure
 - `src/components/`: Reusable Astro components (Navbar, BlogCard, BlogFilterBar, Footer, etc.)
-- `src/layouts/`: Page layouts (BaseLayout, PostLayout)
-- `src/pages/`: Route-based pages (index, conferences, cv, blog/*, 404)
-- `src/content/`: Content collections — blog only (store was removed)
+- `src/layouts/`: Page layouts (BaseLayout, PostLayout, AIPostLayout)
+- `src/pages/`: Route-based pages (index, conferences, cv, blog/*, ai-blog/*, 404)
+- `src/content/`: Content collections — blog, ai-blog, ai-blog-sources
 - `src/config.ts`: Global site configuration (titles, descriptions, feature toggles)
 - `src/styles/global.css`: Global styles, animations, and accessibility utilities
 - `public/`: Static assets (images, favicon, etc.)
 
 ### Content Management
 - **Blog**: Markdown files in `src/content/blog/` with frontmatter schema validation
-- **Content schemas**: Defined in `src/content/config.ts` using Zod validation — blog collection only
+- **AI Blog**: Markdown files in `src/content/ai-blog/` with category-based organization (qa, ai, frontend, backend, data, cloud, life-work-balance, softskills)
+- **AI Blog Sources**: Companion files in `src/content/ai-blog-sources/` with matching filenames, linked via `postSlug` field
+- **Content schemas**: Defined in `src/content/config.ts` using Zod validation — blog, ai-blog, and ai-blog-sources collections
 - **Slug generation**: Controlled by `GENERATE_SLUG_FROM_TITLE` in config
+- **Category config**: `src/lib/aiBlogCategories.ts` defines labels, icons, and descriptions for AI blog categories
 
 ### Key Configuration Files
 - `astro.config.mjs`: Astro config with MDX, sitemap, TailwindCSS integrations, and `image.domains` whitelist
@@ -48,21 +51,31 @@ Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4
 - **Footer**: 3-column layout (branding, nav links, social icons) with copyright line
 - **Theme**: Controlled via `data-theme` attribute on `<html>` — "night" (dark, default) and "lofi" (light). Persisted in localStorage
 
-### Pages (4 total + blog routes)
-- **Home** (`/`): Hero section with profile photo, CTA buttons (LinkedIn, Email, Blog), latest blog posts grid
+### Pages (5 total + blog/ai-blog routes)
+- **Home** (`/`): Hero section with profile photo, CTA buttons (LinkedIn, Email, Blog), latest blog posts grid, latest AI research grid
 - **Conferences** (`/conferences`): Card grid layout for conference talks and interviews
 - **Blog** (`/blog/`): Client-side filtered blog with search, month dropdown, tag pills, pagination (6 per page)
+- **AI Blog** (`/ai-blog/`): AI-generated research with category filter pills, search, month dropdown, tag pills, pagination (6 per page)
 - **CV** (`/cv`): Profile, experience timeline, education, certifications, skills as badge pills
 
 ### Dynamic Routes
 - Blog pagination: `src/pages/blog/[...page].astro` (all posts on single page, client-side pagination)
 - Blog posts: `src/pages/blog/[slug].astro`
 - Blog tags: `src/pages/blog/tag/[tag]/[...page].astro` (for SEO, uses same filter components)
+- AI Blog pagination: `src/pages/ai-blog/[...page].astro`
+- AI Blog posts: `src/pages/ai-blog/[slug].astro` (includes sources + series nav)
+- AI Blog categories: `src/pages/ai-blog/category/[category]/[...page].astro` (SEO routes)
+- AI Blog tags: `src/pages/ai-blog/tag/[tag]/[...page].astro` (SEO routes)
 
 ### Component System
 - **Navbar**: Top navigation replacing old sidebar. Props: `activeItemID`
 - **BlogCard**: Vertical card with Astro `<Image />`, date, title, description, tags. Uses `<article>` element. Data attributes for client-side filtering
 - **BlogFilterBar**: Unified search + month dropdown + tag pills. Client-side JS handles filtering, pagination, and state. Uses `aria-live` regions for screen reader announcements
+- **AIBlogCard**: Like BlogCard but with category badge overlay on image. Uses `data-category` for filtering. CSS class `ai-blog-card`
+- **AIBlogFilterBar**: Extends BlogFilterBar with category filter pills row. Client-side filtering includes category dimension
+- **AIBlogCategoryPill**: Helper component rendering emoji + label for a category
+- **AIBlogSourcesList**: Renders sources/references section with ordered list, external links, optional research notes
+- **AIBlogSeriesNav**: Series navigation box with prev/next links and full series list
 - **HorizontalCard**: Used for blog post lists (legacy, still available)
 - **TimeLine**: CV timeline entries with card-style `bg-base-200 rounded-lg` containers
 - **Footer**: Site footer with social icons (GitHub, Twitter, LinkedIn, YouTube)
@@ -74,6 +87,7 @@ Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4
 - RSS feed auto-generated at `/rss.xml`
 - Sitemap auto-generated for SEO
 - **No projects or store pages** — these were removed in the redesign. Do not recreate them.
+- **AI Blog categories** configured in `src/lib/aiBlogCategories.ts` — to add a new category, add it there AND to the Zod enum in `src/content/config.ts`
 
 ## Astro Best Practices
 
@@ -96,11 +110,13 @@ All code MUST follow these Astro-specific guidelines:
 - PostLayout uses `<Image>` for hero images; BlogCard uses `<Image>` for card thumbnails
 
 ### Content Collections
-- Schemas defined in `src/content/config.ts` — only `blog` collection exists (store was removed)
+- Schemas defined in `src/content/config.ts` — `blog`, `ai-blog`, and `ai-blog-sources` collections
 - Use `z.coerce.date()` for date fields (handles frontmatter string dates)
 - Use `.optional()` for non-required fields, `.default([])` for arrays
 - Tags have a uniqueness refinement: `.refine(items => new Set(items).size === items.length)`
-- Export `BlogSchema` type for use in PostLayout props
+- Export `BlogSchema`, `AIBlogSchema`, `AIBlogSourcesSchema` types
+- AI Blog posts have `category` (enum), optional `series` and `seriesOrder` fields
+- AI Blog sources have `postSlug` (matches post filename) and `sources` array with `title`, `url`, optional `accessDate`
 
 ### View Transitions
 - `ClientRouter` from `astro:transitions` is enabled when `TRANSITION_API` is true in config

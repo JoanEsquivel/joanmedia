@@ -1,0 +1,74 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import { type AIBlogSchema } from "../../content/config";
+import AIPostLayout from "../../layouts/AIPostLayout.astro";
+import createSlug from "../../lib/createSlug";
+
+export async function getStaticPaths() {
+  const postEntries = await getCollection("ai-blog");
+  return postEntries.map((entry) => ({
+    params: { slug: createSlug(entry.data.title, entry.slug) },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"ai-blog">;
+}
+
+const { entry } = Astro.props;
+const post: AIBlogSchema = entry.data;
+const { Content } = await entry.render();
+
+// Look up sources
+const allSources = await getCollection("ai-blog-sources");
+const sourcesEntry = allSources.find((s) => s.data.postSlug === entry.slug);
+let sourceNotes: string | undefined;
+if (sourcesEntry) {
+  const { Content: SourcesContent } = await sourcesEntry.render();
+  // Render the body to get notes HTML
+  const rendered = await sourcesEntry.render();
+  sourceNotes = rendered.remarkPluginFrontmatter ? undefined : undefined;
+}
+// Get the raw body content as notes (rendered markdown)
+let renderedSourceNotes: string | undefined;
+if (sourcesEntry) {
+  const rendered = await sourcesEntry.render();
+  // The body of the sources file contains research methodology notes
+  if (sourcesEntry.body && sourcesEntry.body.trim()) {
+    renderedSourceNotes = `<p>${sourcesEntry.body.trim()}</p>`;
+  }
+}
+
+// Look up series siblings
+let seriesPosts: Array<{ title: string; url: string; order: number }> = [];
+if (post.series) {
+  const allPosts = await getCollection("ai-blog");
+  seriesPosts = allPosts
+    .filter((p) => p.data.series === post.series)
+    .map((p) => ({
+      title: p.data.title,
+      url: "/ai-blog/" + createSlug(p.data.title, p.slug),
+      order: p.data.seriesOrder || 0,
+    }))
+    .sort((a, b) => a.order - b.order);
+}
+---
+
+<AIPostLayout
+  title={post.title}
+  description={post.description}
+  pubDate={post.pubDate}
+  heroImage={post.heroImage}
+  updatedDate={post.updatedDate}
+  badge={post.badge}
+  category={post.category}
+  tags={post.tags}
+  sources={sourcesEntry?.data.sources}
+  sourceNotes={renderedSourceNotes}
+  seriesName={post.series}
+  seriesOrder={post.seriesOrder}
+  seriesPosts={seriesPosts.length > 1 ? seriesPosts : undefined}
+>
+  <Content />
+</AIPostLayout>

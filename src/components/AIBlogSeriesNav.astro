@@ -1,0 +1,50 @@
+---
+interface SeriesPost {
+  title: string;
+  url: string;
+  order: number;
+}
+
+interface Props {
+  seriesName: string;
+  currentOrder: number;
+  posts: SeriesPost[];
+}
+
+const { seriesName, currentOrder, posts } = Astro.props;
+
+const sorted = [...posts].sort((a, b) => a.order - b.order);
+const currentIndex = sorted.findIndex((p) => p.order === currentOrder);
+const prevPost = currentIndex > 0 ? sorted[currentIndex - 1] : null;
+const nextPost = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
+---
+
+<nav aria-label={`Series: ${seriesName}`} class="bg-base-200 rounded-xl p-4 border border-base-300 mt-8">
+  <p class="font-bold mb-3">
+    Series: {seriesName}
+    <span class="text-base-content/70 font-normal">({currentOrder} of {sorted.length})</span>
+  </p>
+  <ol class="list-decimal list-inside space-y-1 mb-4">
+    {sorted.map((post) => (
+      <li class:list={[post.order === currentOrder && "font-bold text-primary"]}>
+        {post.order === currentOrder ? (
+          <span>{post.title}</span>
+        ) : (
+          <a href={post.url} class="hover:text-primary transition-colors duration-200">{post.title}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+  <div class="flex justify-between gap-4">
+    {prevPost ? (
+      <a href={prevPost.url} class="btn btn-ghost btn-sm" aria-label={`Previous in series: ${prevPost.title}`}>
+        <span aria-hidden="true">&larr;</span> Previous
+      </a>
+    ) : <span></span>}
+    {nextPost ? (
+      <a href={nextPost.url} class="btn btn-ghost btn-sm" aria-label={`Next in series: ${nextPost.title}`}>
+        Next <span aria-hidden="true">&rarr;</span>
+      </a>
+    ) : <span></span>}
+  </div>
+</nav>

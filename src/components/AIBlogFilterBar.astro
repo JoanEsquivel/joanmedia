@@ -1,0 +1,325 @@
+---
+import { AI_BLOG_CATEGORIES } from "../lib/aiBlogCategories";
+
+interface Props {
+  allTags?: string[];
+  allMonths?: string[];
+  activeCategory?: string;
+}
+
+const { allTags = [], allMonths = [], activeCategory } = Astro.props;
+const categories = Object.entries(AI_BLOG_CATEGORIES);
+---
+
+<div class="bg-base-200 rounded-2xl p-5 mb-8 shadow-sm" role="search" aria-label="Filter AI blog posts">
+  <div class="flex flex-col gap-4">
+    <!-- Category pills -->
+    <div class="flex flex-wrap gap-2" id="ai-blog-category-filters" role="group" aria-label="Filter by category">
+      <button
+        class:list={[
+          "badge badge-lg cursor-pointer hover:badge-primary transition-colors duration-200",
+          !activeCategory ? "badge-primary" : "badge-outline",
+        ]}
+        data-category=""
+        aria-pressed={!activeCategory ? "true" : "false"}
+        aria-label="Show all categories"
+      >
+        All
+      </button>
+      {categories.map(([key, cat]) => (
+        <button
+          class:list={[
+            "badge badge-lg cursor-pointer hover:badge-primary transition-colors duration-200",
+            activeCategory === key ? "badge-primary" : "badge-outline",
+          ]}
+          data-category={key}
+          aria-pressed={activeCategory === key ? "true" : "false"}
+          aria-label={`Filter by category: ${cat.label}`}
+        >
+          <span aria-hidden="true">{cat.icon}</span>&nbsp;{cat.label}
+        </button>
+      ))}
+    </div>
+
+    <!-- Search with icon -->
+    <label for="ai-blog-search" class="sr-only">Search AI blog posts</label>
+    <div class="relative">
+      <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-base-content/40 pointer-events-none" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+      </svg>
+      <input
+        type="search"
+        id="ai-blog-search"
+        placeholder="Search posts..."
+        class="input input-bordered w-full pl-10"
+        autocomplete="off"
+      />
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- Month filter -->
+      {allMonths.length > 0 && (
+        <div>
+          <label for="ai-blog-month-filter" class="sr-only">Filter by month</label>
+          <select id="ai-blog-month-filter" class="select select-bordered select-sm">
+            <option value="">All months</option>
+            {allMonths.map((m: string) => {
+              const [year, month] = m.split("-");
+              const label = new Date(parseInt(year), parseInt(month) - 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
+              return <option value={m}>{label}</option>;
+            })}
+          </select>
+        </div>
+      )}
+
+      <!-- Divider between month and tags -->
+      {allMonths.length > 0 && allTags.length > 0 && (
+        <div class="hidden sm:block w-px h-6 bg-base-content/20" aria-hidden="true"></div>
+      )}
+
+      <!-- Tag pills -->
+      {allTags.length > 0 && (
+        <div class="flex flex-wrap gap-2" id="ai-blog-tag-filters" role="group" aria-label="Filter by tag">
+          {allTags.map((tag: string) => (
+            <button
+              class="badge badge-outline badge-lg cursor-pointer hover:badge-primary transition-colors duration-200"
+              data-tag={tag.toLowerCase()}
+              aria-pressed="false"
+              aria-label={`Filter by tag: ${tag}`}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <!-- Active filters indicator (live region) -->
+    <div id="ai-active-filters" class="hidden items-center gap-2 text-sm text-base-content/70" aria-live="polite">
+      <span id="ai-filter-count"></span>
+      <button id="ai-clear-filters" class="btn btn-ghost btn-xs gap-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        Clear all
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- No results message (live region) -->
+<div id="ai-no-results" class="hidden text-center py-16" role="status" aria-live="polite">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4 text-base-content/30" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+  </svg>
+  <p class="text-xl font-semibold mb-2">No posts found</p>
+  <p class="text-base-content/70 mb-4">Try adjusting your filters or search term.</p>
+  <button id="ai-no-results-clear" class="btn btn-primary btn-sm">Clear filters</button>
+</div>
+
+<!-- Pagination container -->
+<nav id="ai-blog-pagination" class="flex items-center justify-center gap-2 mt-8" aria-label="AI Blog pagination"></nav>
+
+<script>
+  function initAIBlogFilters() {
+    const searchInput = document.getElementById('ai-blog-search') as HTMLInputElement;
+    const monthSelect = document.getElementById('ai-blog-month-filter') as HTMLSelectElement;
+    const categoryFiltersEl = document.getElementById('ai-blog-category-filters');
+    const tagFiltersEl = document.getElementById('ai-blog-tag-filters');
+    const activeFiltersEl = document.getElementById('ai-active-filters');
+    const filterCountEl = document.getElementById('ai-filter-count');
+    const clearBtn = document.getElementById('ai-clear-filters');
+    const noResults = document.getElementById('ai-no-results');
+    const noResultsClear = document.getElementById('ai-no-results-clear');
+    const paginationEl = document.getElementById('ai-blog-pagination');
+    const cards = Array.from(document.querySelectorAll('.ai-blog-card')) as HTMLElement[];
+
+    if (!cards.length) return;
+
+    const POSTS_PER_PAGE = 6;
+    const DEBOUNCE_MS = 200;
+    let searchTerm = '';
+    let selectedTag = '';
+    let selectedMonth = '';
+    let selectedCategory = '';
+    let currentPage = 1;
+    let filteredCards: HTMLElement[] = [];
+    let debounceTimer: ReturnType<typeof setTimeout>;
+
+    // Check for pre-selected category from data attribute
+    if (categoryFiltersEl) {
+      const activeBtn = categoryFiltersEl.querySelector('button[aria-pressed="true"]') as HTMLElement;
+      if (activeBtn && activeBtn.dataset.category) {
+        selectedCategory = activeBtn.dataset.category;
+      }
+    }
+
+    function setPillActive(btn: Element, active: boolean) {
+      btn.classList.toggle('badge-primary', active);
+      btn.classList.toggle('badge-outline', !active);
+      btn.setAttribute('aria-pressed', String(active));
+    }
+
+    function filterCards(): HTMLElement[] {
+      return cards.filter((el) => {
+        const title = el.dataset.title || '';
+        const desc = el.dataset.description || '';
+        const tags = el.dataset.tags || '';
+        const month = el.dataset.month || '';
+        const category = el.dataset.category || '';
+
+        const matchesSearch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm);
+        const matchesTag = !selectedTag || tags.split(',').includes(selectedTag);
+        const matchesMonth = !selectedMonth || month === selectedMonth;
+        const matchesCategory = !selectedCategory || category === selectedCategory;
+
+        return matchesSearch && matchesTag && matchesMonth && matchesCategory;
+      });
+    }
+
+    function renderPagination(totalPages: number) {
+      if (!paginationEl) return;
+      if (totalPages <= 1) {
+        paginationEl.innerHTML = '';
+        return;
+      }
+      let html = '';
+      html += `<button class="btn btn-sm ${currentPage === 1 ? 'btn-disabled' : ''}" aria-label="Previous page" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>&lsaquo;</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="btn btn-sm ${i === currentPage ? 'btn-primary' : ''}" aria-label="Page ${i}" ${i === currentPage ? 'aria-current="page"' : ''} data-page="${i}">${i}</button>`;
+      }
+      html += `<button class="btn btn-sm ${currentPage === totalPages ? 'btn-disabled' : ''}" aria-label="Next page" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>&rsaquo;</button>`;
+      paginationEl.innerHTML = html;
+    }
+
+    function renderPage() {
+      const totalPages = Math.max(1, Math.ceil(filteredCards.length / POSTS_PER_PAGE));
+      if (currentPage > totalPages) currentPage = 1;
+      const start = (currentPage - 1) * POSTS_PER_PAGE;
+      const end = start + POSTS_PER_PAGE;
+      const visible = new Set(filteredCards.slice(start, end));
+
+      cards.forEach((el) => {
+        el.classList.toggle('hidden-card', !visible.has(el));
+      });
+
+      if (noResults) {
+        noResults.classList.toggle('hidden', filteredCards.length > 0);
+      }
+
+      const grid = document.getElementById('ai-blog-grid');
+      if (grid) {
+        grid.classList.toggle('hidden', filteredCards.length === 0);
+      }
+
+      const hasFilters = searchTerm || selectedTag || selectedMonth || selectedCategory;
+      if (activeFiltersEl) {
+        activeFiltersEl.classList.toggle('hidden', !hasFilters);
+        activeFiltersEl.classList.toggle('flex', !!hasFilters);
+      }
+      if (filterCountEl) {
+        filterCountEl.textContent = `${filteredCards.length} post${filteredCards.length !== 1 ? 's' : ''} found`;
+      }
+
+      renderPagination(totalPages);
+    }
+
+    function applyFilters() {
+      filteredCards = filterCards();
+      currentPage = 1;
+      renderPage();
+    }
+
+    function clearAllFilters() {
+      searchTerm = '';
+      selectedTag = '';
+      selectedMonth = '';
+      selectedCategory = '';
+      if (searchInput) searchInput.value = '';
+      if (monthSelect) monthSelect.value = '';
+      tagFiltersEl?.querySelectorAll('button').forEach((btn) => setPillActive(btn, false));
+      if (categoryFiltersEl) {
+        categoryFiltersEl.querySelectorAll('button').forEach((btn) => {
+          const isAll = !(btn as HTMLElement).dataset.category;
+          setPillActive(btn, isAll);
+        });
+      }
+      applyFilters();
+    }
+
+    // Search with debounce
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          searchTerm = searchInput.value.toLowerCase().trim();
+          applyFilters();
+        }, DEBOUNCE_MS);
+      });
+    }
+
+    // Month filter
+    if (monthSelect) {
+      monthSelect.addEventListener('change', () => {
+        selectedMonth = monthSelect.value;
+        applyFilters();
+      });
+    }
+
+    // Category pills — event delegation
+    if (categoryFiltersEl) {
+      categoryFiltersEl.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('button[data-category]');
+        if (!btn) return;
+        const category = (btn as HTMLElement).dataset.category || '';
+        selectedCategory = category;
+        categoryFiltersEl.querySelectorAll('button').forEach((b) => setPillActive(b, false));
+        setPillActive(btn, true);
+        applyFilters();
+      });
+    }
+
+    // Tag pills — event delegation
+    if (tagFiltersEl) {
+      tagFiltersEl.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('button[data-tag]');
+        if (!btn) return;
+        const tag = (btn as HTMLElement).dataset.tag || '';
+        if (selectedTag === tag) {
+          selectedTag = '';
+          setPillActive(btn, false);
+        } else {
+          tagFiltersEl.querySelectorAll('button').forEach((b) => setPillActive(b, false));
+          selectedTag = tag;
+          setPillActive(btn, true);
+        }
+        applyFilters();
+      });
+    }
+
+    // Pagination — event delegation
+    if (paginationEl) {
+      paginationEl.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('button[data-page]');
+        if (!btn || btn.hasAttribute('disabled')) return;
+        const page = parseInt((btn as HTMLElement).dataset.page || '1');
+        const totalPages = Math.max(1, Math.ceil(filteredCards.length / POSTS_PER_PAGE));
+        if (page >= 1 && page <= totalPages) {
+          currentPage = page;
+          renderPage();
+        }
+      });
+    }
+
+    // Clear buttons
+    if (clearBtn) clearBtn.addEventListener('click', clearAllFilters);
+    if (noResultsClear) noResultsClear.addEventListener('click', clearAllFilters);
+
+    // Initial render
+    filteredCards = filterCards();
+    renderPage();
+  }
+
+  initAIBlogFilters();
+  document.addEventListener('astro:after-swap', initAIBlogFilters);
+</script>

@@ -1,0 +1,72 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import AIBlogCard from "@components/AIBlogCard.astro";
+import AIBlogFilterBar from "@components/AIBlogFilterBar.astro";
+import { getCollection } from "astro:content";
+import createSlug from "../../../../lib/createSlug";
+import { AI_BLOG_CATEGORIES } from "../../../../lib/aiBlogCategories";
+import type { GetStaticPathsOptions } from "astro";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const allPosts = await getCollection("ai-blog");
+  const categories = Object.keys(AI_BLOG_CATEGORIES);
+
+  return categories.flatMap((category) => {
+    const filtered = allPosts
+      .filter((post) => post.data.category === category)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    return paginate(filtered, {
+      params: { category },
+      pageSize: 999,
+    });
+  });
+}
+
+const { page } = Astro.props;
+const params = Astro.params;
+const posts = page.data;
+const category = params.category as keyof typeof AI_BLOG_CATEGORIES;
+const cat = AI_BLOG_CATEGORIES[category];
+
+const allTags = [...new Set(posts.map((post: any) => post.data.tags || []).flat())] as string[];
+const allMonths = [...new Set(
+  posts.map((post: any) => {
+    const d = new Date(post.data.pubDate);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  })
+)].sort((a, b) => b.localeCompare(a));
+---
+
+<BaseLayout title={"AI Blog - " + cat.label} activeItemID="ai-blog">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold tracking-tight">AI Blog</h1>
+    <p class="text-base-content/70 mt-2">
+      Category: <span class="badge badge-primary gap-1"><span aria-hidden="true">{cat.icon}</span> {cat.label}</span>
+    </p>
+    <a href="/ai-blog/" class="btn btn-ghost btn-sm mt-2"><span aria-hidden="true">&larr;</span> All posts</a>
+  </div>
+
+  <AIBlogFilterBar allTags={allTags} allMonths={allMonths} activeCategory={params.category} />
+
+  {posts.length === 0 ? (
+    <div class="bg-base-200 border-l-4 border-secondary w-full p-4">
+      <p class="font-bold">Sorry!</p>
+      <p>There are no AI blog posts in this category. Check back later!</p>
+    </div>
+  ) : (
+    <div id="ai-blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map((post: any) => (
+        <AIBlogCard
+          title={post.data.title}
+          img={post.data.heroImage}
+          desc={post.data.description}
+          url={"/ai-blog/" + createSlug(post.data.title, post.slug)}
+          badge={post.data.badge}
+          tags={post.data.tags}
+          pubDate={post.data.pubDate.toISOString()}
+          category={post.data.category}
+        />
+      ))}
+    </div>
+  )}
+</BaseLayout>
