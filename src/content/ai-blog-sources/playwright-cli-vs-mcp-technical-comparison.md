@@ -1,0 +1,33 @@
+---
+postSlug: "playwright-cli-vs-mcp-technical-comparison"
+sources:
+  - title: "Playwright CLI: The Token-Efficient Alternative to Playwright MCP"
+    url: "https://testcollab.com/blog/playwright-cli"
+    accessDate: "2026-03-08"
+  - title: "Deep Dive into Playwright CLI: Token Efficient Browser Automation"
+    url: "https://testdino.com/blog/playwright-cli/"
+    accessDate: "2026-03-08"
+  - title: "Playwright CLI and MCP: Key Differences and Integration with AI Agents"
+    url: "https://testdino.com/blog/playwright-cli-vs-mcp/"
+    accessDate: "2026-03-08"
+  - title: "Playwright CLI vs. MCP: Browser Automation for Coding Agents"
+    url: "https://betterstack.com/community/guides/ai/playwright-cli-vs-mcp-browser/"
+    accessDate: "2026-03-08"
+  - title: "@playwright/cli npm package"
+    url: "https://www.npmjs.com/package/@playwright/cli"
+    accessDate: "2026-03-08"
+  - title: "@playwright/mcp npm package"
+    url: "https://www.npmjs.com/package/@playwright/mcp"
+    accessDate: "2026-03-08"
+  - title: "Microsoft Playwright MCP GitHub Repository"
+    url: "https://github.com/microsoft/playwright-mcp"
+    accessDate: "2026-03-08"
+  - title: "MCP vs Playwright CLI: Best Browser Control for Agents and Tests"
+    url: "https://supatest.ai/blog/playwright-mcp-vs-cli-ai-browser-automation"
+    accessDate: "2026-03-08"
+  - title: "MCP vs Playwright CLI: Which One Should Your AI Agent Use?"
+    url: "https://www.test-lab.ai/blog/playwright-mcp-vs-cli-agentic-testing"
+    accessDate: "2026-03-08"
+---
+
+Sources compiled from the blog-researcher agent's research on Playwright CLI for AI coding agents. Benchmark data referenced in this article comes primarily from TestCollab, TestDino, and Better Stack, who independently tested token consumption and task success rates comparing Playwright CLI and MCP approaches. All URLs verified against the research resources file.
