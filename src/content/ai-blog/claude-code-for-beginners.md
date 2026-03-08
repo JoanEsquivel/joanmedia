@@ -8,7 +8,7 @@ tags:
   - Claude Code
   - CLI
   - Developer Tools
-badge: "New"
+badge: ""
 ---
 
 ## Table of Contents

@@ -117,8 +117,6 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
   <button id="ai-no-results-clear" class="btn btn-primary btn-sm">Clear filters</button>
 </div>
 
-<!-- Pagination container -->
-<nav id="ai-blog-pagination" class="flex items-center justify-center gap-2 mt-8" aria-label="AI Blog pagination"></nav>
 
 <script>
   function initAIBlogFilters() {
@@ -174,6 +172,10 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
         const matchesCategory = !selectedCategory || category === selectedCategory;
 
         return matchesSearch && matchesTag && matchesMonth && matchesCategory;
+      }).sort((a, b) => {
+        const dateA = a.dataset.date || '';
+        const dateB = b.dataset.date || '';
+        return dateB.localeCompare(dateA);
       });
     }
 
@@ -199,6 +201,17 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
       const end = start + POSTS_PER_PAGE;
       const visible = new Set(filteredCards.slice(start, end));
 
+      const grid = document.getElementById('ai-blog-grid');
+
+      // Reorder DOM to match sorted order (newest first)
+      if (grid) {
+        filteredCards.forEach((el) => grid.appendChild(el));
+        // Append non-filtered cards at the end (hidden)
+        cards.forEach((el) => {
+          if (!filteredCards.includes(el)) grid.appendChild(el);
+        });
+      }
+
       cards.forEach((el) => {
         el.classList.toggle('hidden-card', !visible.has(el));
       });
@@ -207,7 +220,6 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
         noResults.classList.toggle('hidden', filteredCards.length > 0);
       }
 
-      const grid = document.getElementById('ai-blog-grid');
       if (grid) {
         grid.classList.toggle('hidden', filteredCards.length === 0);
       }
