@@ -1,0 +1,30 @@
+---
+postSlug: "configuring-mcp-servers-in-claude-code"
+sources:
+  - title: "Claude Code MCP Documentation"
+    url: "https://code.claude.com/docs/en/mcp"
+    accessDate: "2026-03-08"
+  - title: "Model Context Protocol Specification"
+    url: "https://modelcontextprotocol.io/introduction"
+    accessDate: "2026-03-08"
+  - title: "Official MCP Servers Repository"
+    url: "https://github.com/modelcontextprotocol/servers"
+    accessDate: "2026-03-08"
+  - title: "Builder.io: Claude Code MCP Servers Setup Guide"
+    url: "https://www.builder.io/blog/claude-code-mcp-servers"
+    accessDate: "2026-03-08"
+  - title: "Cross-Platform MCP Comparison (Cursor, VS Code, Claude)"
+    url: "https://dev.to/darkmavis1980/understanding-mcp-servers-across-different-platforms-claude-desktop-vs-vs-code-vs-cursor-4opk"
+    accessDate: "2026-03-08"
+  - title: "GitHub MCP Server Installation Guide for Claude Code"
+    url: "https://github.com/github/github-mcp-server/blob/main/docs/installation-guides/install-claude.md"
+    accessDate: "2026-03-08"
+  - title: "MCPcat: Adding an MCP Server to Claude Code"
+    url: "https://mcpcat.io/guides/adding-an-mcp-server-to-claude-code/"
+    accessDate: "2026-03-08"
+  - title: "Cloud Artisan: Setting Up MCP Servers in Claude Code"
+    url: "https://cloudartisan.com/posts/2025-04-12-adding-mcp-servers-claude-code/"
+    accessDate: "2026-03-08"
+---
+
+Sources compiled from official Anthropic documentation, the Model Context Protocol specification, and community guides covering MCP server configuration across different AI coding tools. The cross-platform comparison source was used for the Cursor vs. Claude Code migration cheat sheet.
