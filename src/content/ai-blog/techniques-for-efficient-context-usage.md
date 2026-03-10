@@ -10,7 +10,7 @@ tags:
   - RAG
   - Prompt Caching
   - AI Agents
-badge: "New"
+badge: ""
 series: "Context Engineering"
 seriesOrder: 4
 ---

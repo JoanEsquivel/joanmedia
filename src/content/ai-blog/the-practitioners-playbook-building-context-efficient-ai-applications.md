@@ -10,7 +10,7 @@ tags:
   - LLM
   - AI Agents
   - Prompt Caching
-badge: "New"
+badge: ""
 series: "Context Engineering"
 seriesOrder: 5
 ---

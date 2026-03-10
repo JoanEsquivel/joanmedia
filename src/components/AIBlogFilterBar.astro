@@ -86,24 +86,16 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
         </div>
       )}
 
-      <!-- Divider between month and tags -->
-      {allMonths.length > 0 && allTags.length > 0 && (
-        <div class="hidden sm:block w-px h-6 bg-base-content/20" aria-hidden="true"></div>
-      )}
-
-      <!-- Tag pills -->
+      <!-- Tag filter -->
       {allTags.length > 0 && (
-        <div class="flex flex-wrap gap-2" id="ai-blog-tag-filters" role="group" aria-label="Filter by tag">
-          {allTags.map((tag: string) => (
-            <button
-              class="badge badge-outline badge-lg cursor-pointer hover:badge-primary transition-colors duration-200"
-              data-tag={tag.toLowerCase()}
-              aria-pressed="false"
-              aria-label={`Filter by tag: ${tag}`}
-            >
-              {tag}
-            </button>
-          ))}
+        <div>
+          <label for="ai-blog-tag-filter" class="sr-only">Filter by tag</label>
+          <select id="ai-blog-tag-filter" class="select select-bordered select-sm">
+            <option value="">All tags</option>
+            {[...allTags].sort().map((tag: string) => (
+              <option value={tag.toLowerCase()}>{tag}</option>
+            ))}
+          </select>
         </div>
       )}
     </div>
@@ -138,7 +130,7 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
     const monthSelect = document.getElementById('ai-blog-month-filter') as HTMLSelectElement;
     const seriesSelect = document.getElementById('ai-blog-series-filter') as HTMLSelectElement;
     const categoryFiltersEl = document.getElementById('ai-blog-category-filters');
-    const tagFiltersEl = document.getElementById('ai-blog-tag-filters');
+    const tagSelect = document.getElementById('ai-blog-tag-filter') as HTMLSelectElement;
     const activeFiltersEl = document.getElementById('ai-active-filters');
     const filterCountEl = document.getElementById('ai-filter-count');
     const clearBtn = document.getElementById('ai-clear-filters');
@@ -276,7 +268,7 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
       if (searchInput) searchInput.value = '';
       if (monthSelect) monthSelect.value = '';
       if (seriesSelect) seriesSelect.value = '';
-      tagFiltersEl?.querySelectorAll('button').forEach((btn) => setPillActive(btn, false));
+      if (tagSelect) tagSelect.value = '';
       if (categoryFiltersEl) {
         categoryFiltersEl.querySelectorAll('button').forEach((btn) => {
           const isAll = !(btn as HTMLElement).dataset.category;
@@ -326,20 +318,10 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
       });
     }
 
-    // Tag pills — event delegation
-    if (tagFiltersEl) {
-      tagFiltersEl.addEventListener('click', (e) => {
-        const btn = (e.target as HTMLElement).closest('button[data-tag]');
-        if (!btn) return;
-        const tag = (btn as HTMLElement).dataset.tag || '';
-        if (selectedTag === tag) {
-          selectedTag = '';
-          setPillActive(btn, false);
-        } else {
-          tagFiltersEl.querySelectorAll('button').forEach((b) => setPillActive(b, false));
-          selectedTag = tag;
-          setPillActive(btn, true);
-        }
+    // Tag filter
+    if (tagSelect) {
+      tagSelect.addEventListener('change', () => {
+        selectedTag = tagSelect.value;
         applyFilters();
       });
     }

@@ -9,7 +9,7 @@ tags:
   - Prompt Engineering
   - LLM
   - AI Agents
-badge: "New"
+badge: ""
 series: "Context Engineering"
 seriesOrder: 1
 ---

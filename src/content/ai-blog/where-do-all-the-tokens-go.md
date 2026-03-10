@@ -9,7 +9,7 @@ tags:
   - Token Optimization
   - AI Agents
   - LLM
-badge: "New"
+badge: ""
 series: "Context Engineering"
 seriesOrder: 3
 ---

@@ -10,7 +10,7 @@ tags:
   - LLM
   - Context Windows
   - AI Pricing
-badge: "New"
+badge: ""
 series: "Context Engineering"
 seriesOrder: 2
 ---
