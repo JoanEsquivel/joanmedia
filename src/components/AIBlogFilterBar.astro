@@ -152,6 +152,24 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
     let filteredCards: HTMLElement[] = [];
     let debounceTimer: ReturnType<typeof setTimeout>;
 
+    // Capture original dropdown options from server-rendered HTML
+    type OriginalOption = { value: string; label: string };
+    const originalMonthOptions: OriginalOption[] = [];
+    const originalSeriesOptions: OriginalOption[] = [];
+    const originalTagOptions: OriginalOption[] = [];
+
+    function captureOptions(select: HTMLSelectElement | null, dest: OriginalOption[]) {
+      if (!select) return;
+      dest.length = 0;
+      Array.from(select.options).forEach((opt) => {
+        if (opt.value) dest.push({ value: opt.value, label: opt.textContent || opt.value });
+      });
+    }
+
+    captureOptions(monthSelect, originalMonthOptions);
+    captureOptions(seriesSelect, originalSeriesOptions);
+    captureOptions(tagSelect, originalTagOptions);
+
     // Check for pre-selected category from data attribute
     if (categoryFiltersEl) {
       const activeBtn = categoryFiltersEl.querySelector('button[aria-pressed="true"]') as HTMLElement;
@@ -166,7 +184,15 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
       btn.setAttribute('aria-pressed', String(active));
     }
 
-    function filterCards(): HTMLElement[] {
+    interface SkipFlags {
+      skipMonth?: boolean;
+      skipSeries?: boolean;
+      skipTag?: boolean;
+      skipCategory?: boolean;
+      skipSearch?: boolean;
+    }
+
+    function getMatchingCards(skip: SkipFlags = {}): HTMLElement[] {
       return cards.filter((el) => {
         const title = el.dataset.title || '';
         const desc = el.dataset.description || '';
@@ -175,25 +201,63 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
         const category = el.dataset.category || '';
         const series = el.dataset.series || '';
 
-        const matchesSearch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm);
-        const matchesTag = !selectedTag || tags.split(',').includes(selectedTag);
-        const matchesMonth = !selectedMonth || month === selectedMonth;
-        const matchesCategory = !selectedCategory || category === selectedCategory;
-        const matchesSeries = !selectedSeries || series === selectedSeries;
+        const matchesSearch = skip.skipSearch || !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm);
+        const matchesTag = skip.skipTag || !selectedTag || tags.split(',').includes(selectedTag);
+        const matchesMonth = skip.skipMonth || !selectedMonth || month === selectedMonth;
+        const matchesCategory = skip.skipCategory || !selectedCategory || category === selectedCategory;
+        const matchesSeries = skip.skipSeries || !selectedSeries || series === selectedSeries;
 
         return matchesSearch && matchesTag && matchesMonth && matchesCategory && matchesSeries;
       }).sort((a, b) => {
-        // When filtering by series, sort by part number (ascending)
         if (selectedSeries) {
           const orderA = parseInt(a.dataset.seriesOrder || '0');
           const orderB = parseInt(b.dataset.seriesOrder || '0');
           return orderA - orderB;
         }
-        // Default: sort by date (newest first)
         const dateA = a.dataset.date || '';
         const dateB = b.dataset.date || '';
         return dateB.localeCompare(dateA);
       });
+    }
+
+    function rebuildSelect(
+      select: HTMLSelectElement | null,
+      originals: OriginalOption[],
+      availableValues: Set<string>,
+      allLabel: string,
+      currentValue: string
+    ): string {
+      if (!select) return currentValue;
+      const keepCurrent = availableValues.has(currentValue);
+      let html = `<option value="">${allLabel}</option>`;
+      originals.forEach((opt) => {
+        if (availableValues.has(opt.value)) {
+          html += `<option value="${opt.value}"${opt.value === currentValue && keepCurrent ? ' selected' : ''}>${opt.label}</option>`;
+        }
+      });
+      select.innerHTML = html;
+      if (!keepCurrent) select.value = '';
+      return keepCurrent ? currentValue : '';
+    }
+
+    function updateDropdownOptions() {
+      // Month: get cards matching all filters EXCEPT month
+      const monthCandidates = getMatchingCards({ skipMonth: true });
+      const availableMonths = new Set(monthCandidates.map((el) => el.dataset.month || '').filter(Boolean));
+      selectedMonth = rebuildSelect(monthSelect, originalMonthOptions, availableMonths, 'All months', selectedMonth);
+
+      // Series: get cards matching all filters EXCEPT series
+      const seriesCandidates = getMatchingCards({ skipSeries: true });
+      const availableSeries = new Set(seriesCandidates.map((el) => el.dataset.series || '').filter(Boolean));
+      selectedSeries = rebuildSelect(seriesSelect, originalSeriesOptions, availableSeries, 'All series', selectedSeries);
+
+      // Tag: get cards matching all filters EXCEPT tag
+      const tagCandidates = getMatchingCards({ skipTag: true });
+      const availableTags = new Set<string>();
+      tagCandidates.forEach((el) => {
+        (el.dataset.tags || '').split(',').filter(Boolean).forEach((t) => availableTags.add(t));
+      });
+      selectedTag = rebuildSelect(tagSelect, originalTagOptions, availableTags, 'All tags', selectedTag);
     }
 
     function renderPagination(totalPages: number) {
@@ -254,7 +318,8 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
     }
 
     function applyFilters() {
-      filteredCards = filterCards();
+      updateDropdownOptions();
+      filteredCards = getMatchingCards();
       currentPage = 1;
       renderPage();
     }
@@ -344,9 +409,8 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
     if (clearBtn) clearBtn.addEventListener('click', clearAllFilters);
     if (noResultsClear) noResultsClear.addEventListener('click', clearAllFilters);
 
-    // Initial render
-    filteredCards = filterCards();
-    renderPage();
+    // Initial render — use applyFilters to sync dropdowns on load
+    applyFilters();
   }
 
   initAIBlogFilters();
