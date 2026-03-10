@@ -1,16 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import BlogCard from "../components/BlogCard.astro";
 import AIBlogCard from "../components/AIBlogCard.astro";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import createSlug from "../lib/createSlug";
-
-const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
-
-const last_posts = posts.slice(0, 3);
 
 const aiPosts = (await getCollection("ai-blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -31,7 +24,7 @@ const last_ai_posts = aiPosts.slice(0, 3);
       <h1 class="text-5xl md:text-6xl font-bold tracking-tight animate-fade-in-up animate-delay-200">I'm Joan Esquivel</h1>
       <div class="text-xl md:text-2xl py-3 font-bold text-primary animate-fade-in-up animate-delay-200">Software QA Engineer</div>
       <p class="py-2 text-base-content/70 max-w-2xl leading-relaxed animate-fade-in-up animate-delay-300">
-        You will find my conferences, blog posts, and professional journey on this website.
+        You will find my conferences, AI research, and professional journey on this website.
         I'm passionate about quality engineering, test automation, and sharing knowledge with the community.
       </p>
       <div class="mt-8 flex flex-wrap gap-3 animate-fade-in-up animate-delay-400">
@@ -41,35 +34,11 @@ const last_ai_posts = aiPosts.slice(0, 3);
         <a class="btn btn-outline" href="mailto:joan.esquim@gmail.com">
           Email Me
         </a>
-        <a class="btn btn-ghost" href="/blog/">
-          Read the Blog
+        <a class="btn btn-ghost" href="/ai-blog/">
+          AI Research
         </a>
       </div>
     </div>
-  </div>
-
-  <div class="divider my-0"></div>
-
-  <div>
-    <h2 class="text-3xl w-full font-bold mb-6 mt-10 tracking-tight">Latest from the Blog</h2>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {last_posts.map((post) => (
-      <BlogCard
-        title={post.data.title}
-        img={post.data.heroImage}
-        desc={post.data.description}
-        url={"/blog/" + createSlug(post.data.title, post.slug)}
-        badge={post.data.badge}
-        tags={post.data.tags}
-        pubDate={post.data.pubDate.toISOString()}
-      />
-    ))}
-  </div>
-
-  <div class="mt-8 text-center">
-    <a href="/blog/" class="btn btn-ghost">View all posts<span aria-hidden="true"> &rarr;</span></a>
   </div>
 
   <div class="divider my-0"></div>
