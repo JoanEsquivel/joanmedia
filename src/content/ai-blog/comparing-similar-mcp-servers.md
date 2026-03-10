@@ -10,7 +10,7 @@ tags:
   - Developer Tools
   - AI Infrastructure
 badge: "New"
-series: "MCP Servers for Claude Code"
+series: "MCP Servers in Claude Code"
 seriesOrder: 4
 ---
 

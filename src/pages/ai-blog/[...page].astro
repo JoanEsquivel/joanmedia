@@ -22,6 +22,15 @@ const allMonths = [...new Set(
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
   })
 )].sort((a, b) => b.localeCompare(a));
+
+// Build series metadata
+const seriesCounts = new Map<string, number>();
+for (const post of posts) {
+  if (post.data.series) {
+    seriesCounts.set(post.data.series, (seriesCounts.get(post.data.series) || 0) + 1);
+  }
+}
+const allSeries = [...seriesCounts.keys()].sort();
 ---
 
 <BaseLayout title="AI Blog" activeItemID="ai-blog">
@@ -30,7 +39,7 @@ const allMonths = [...new Set(
     <p class="text-base-content/70 mt-2">AI-generated research on QA, development, cloud, and more.</p>
   </div>
 
-  <AIBlogFilterBar allTags={allTags} allMonths={allMonths} />
+  <AIBlogFilterBar allTags={allTags} allMonths={allMonths} allSeries={allSeries} />
 
   {posts.length === 0 ? (
     <div class="bg-base-200 border-l-4 border-secondary w-full p-4">
@@ -49,6 +58,9 @@ const allMonths = [...new Set(
           tags={post.data.tags}
           pubDate={post.data.pubDate.toISOString()}
           category={post.data.category}
+          series={post.data.series}
+          seriesOrder={post.data.seriesOrder}
+          seriesTotal={post.data.series ? seriesCounts.get(post.data.series) : undefined}
         />
       ))}
     </div>

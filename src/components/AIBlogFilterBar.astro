@@ -5,9 +5,10 @@ interface Props {
   allTags?: string[];
   allMonths?: string[];
   activeCategory?: string;
+  allSeries?: string[];
 }
 
-const { allTags = [], allMonths = [], activeCategory } = Astro.props;
+const { allTags = [], allMonths = [], activeCategory, allSeries = [] } = Astro.props;
 const categories = Object.entries(AI_BLOG_CATEGORIES);
 ---
 
@@ -72,6 +73,19 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
         </div>
       )}
 
+      <!-- Series filter -->
+      {allSeries.length > 0 && (
+        <div>
+          <label for="ai-blog-series-filter" class="sr-only">Filter by series</label>
+          <select id="ai-blog-series-filter" class="select select-bordered select-sm">
+            <option value="">All series</option>
+            {allSeries.map((s: string) => (
+              <option value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
       <!-- Divider between month and tags -->
       {allMonths.length > 0 && allTags.length > 0 && (
         <div class="hidden sm:block w-px h-6 bg-base-content/20" aria-hidden="true"></div>
@@ -122,6 +136,7 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
   function initAIBlogFilters() {
     const searchInput = document.getElementById('ai-blog-search') as HTMLInputElement;
     const monthSelect = document.getElementById('ai-blog-month-filter') as HTMLSelectElement;
+    const seriesSelect = document.getElementById('ai-blog-series-filter') as HTMLSelectElement;
     const categoryFiltersEl = document.getElementById('ai-blog-category-filters');
     const tagFiltersEl = document.getElementById('ai-blog-tag-filters');
     const activeFiltersEl = document.getElementById('ai-active-filters');
@@ -140,6 +155,7 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
     let selectedTag = '';
     let selectedMonth = '';
     let selectedCategory = '';
+    let selectedSeries = '';
     let currentPage = 1;
     let filteredCards: HTMLElement[] = [];
     let debounceTimer: ReturnType<typeof setTimeout>;
@@ -165,14 +181,23 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
         const tags = el.dataset.tags || '';
         const month = el.dataset.month || '';
         const category = el.dataset.category || '';
+        const series = el.dataset.series || '';
 
         const matchesSearch = !searchTerm || title.includes(searchTerm) || desc.includes(searchTerm);
         const matchesTag = !selectedTag || tags.split(',').includes(selectedTag);
         const matchesMonth = !selectedMonth || month === selectedMonth;
         const matchesCategory = !selectedCategory || category === selectedCategory;
+        const matchesSeries = !selectedSeries || series === selectedSeries;
 
-        return matchesSearch && matchesTag && matchesMonth && matchesCategory;
+        return matchesSearch && matchesTag && matchesMonth && matchesCategory && matchesSeries;
       }).sort((a, b) => {
+        // When filtering by series, sort by part number (ascending)
+        if (selectedSeries) {
+          const orderA = parseInt(a.dataset.seriesOrder || '0');
+          const orderB = parseInt(b.dataset.seriesOrder || '0');
+          return orderA - orderB;
+        }
+        // Default: sort by date (newest first)
         const dateA = a.dataset.date || '';
         const dateB = b.dataset.date || '';
         return dateB.localeCompare(dateA);
@@ -224,7 +249,7 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
         grid.classList.toggle('hidden', filteredCards.length === 0);
       }
 
-      const hasFilters = searchTerm || selectedTag || selectedMonth || selectedCategory;
+      const hasFilters = searchTerm || selectedTag || selectedMonth || selectedCategory || selectedSeries;
       if (activeFiltersEl) {
         activeFiltersEl.classList.toggle('hidden', !hasFilters);
         activeFiltersEl.classList.toggle('flex', !!hasFilters);
@@ -247,8 +272,10 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
       selectedTag = '';
       selectedMonth = '';
       selectedCategory = '';
+      selectedSeries = '';
       if (searchInput) searchInput.value = '';
       if (monthSelect) monthSelect.value = '';
+      if (seriesSelect) seriesSelect.value = '';
       tagFiltersEl?.querySelectorAll('button').forEach((btn) => setPillActive(btn, false));
       if (categoryFiltersEl) {
         categoryFiltersEl.querySelectorAll('button').forEach((btn) => {
@@ -274,6 +301,14 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
     if (monthSelect) {
       monthSelect.addEventListener('change', () => {
         selectedMonth = monthSelect.value;
+        applyFilters();
+      });
+    }
+
+    // Series filter
+    if (seriesSelect) {
+      seriesSelect.addEventListener('change', () => {
+        selectedSeries = seriesSelect.value;
         applyFilters();
       });
     }

@@ -11,7 +11,7 @@ tags:
   - Browser Automation
   - Token Efficiency
 badge: "New"
-series: "Playwright CLI for AI Coding Agents"
+series: "Playwright CLI"
 seriesOrder: 2
 ---
 

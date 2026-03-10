@@ -11,9 +11,12 @@ interface Props {
   tags?: string[];
   pubDate?: string;
   category: AIBlogCategory;
+  series?: string;
+  seriesOrder?: number;
+  seriesTotal?: number;
 }
 
-const { title, img, desc, url, badge, tags = [], pubDate, category } = Astro.props;
+const { title, img, desc, url, badge, tags = [], pubDate, category, series, seriesOrder, seriesTotal } = Astro.props;
 
 const month = pubDate ? new Date(pubDate).toISOString().slice(0, 7) : "";
 const formattedDate = pubDate
@@ -35,6 +38,8 @@ const cat = AI_BLOG_CATEGORIES[category];
   data-month={month}
   data-date={pubDate}
   data-category={category}
+  data-series={series || ""}
+  data-series-order={seriesOrder || ""}
 >
   <a href={url} class="block focus-visible:outline-offset-4">
     {img && (
@@ -57,6 +62,13 @@ const cat = AI_BLOG_CATEGORIES[category];
     <div class="card-body p-4">
       {formattedDate && (
         <time datetime={pubDate} class="text-xs text-base-content/70">{formattedDate}</time>
+      )}
+      {series && seriesOrder && seriesTotal && (
+        <span class="text-xs text-primary/80 font-medium">
+          Part {seriesOrder} of {seriesTotal}
+          <span aria-hidden="true"> &middot; </span>
+          <span class="text-base-content/70 font-normal">{series}</span>
+        </span>
       )}
       <h2 class="card-title text-lg">
         {title}
