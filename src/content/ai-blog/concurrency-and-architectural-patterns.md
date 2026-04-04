@@ -2,7 +2,7 @@
 title: "Concurrency and Architectural Patterns: Designing Systems at Scale"
 description: "A comprehensive guide to concurrency patterns (Thread Pool, Reactor, Proactor) and architectural patterns (MVC, CQRS, Microservices, Event-Driven) for scalable systems."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - Concurrency
   - System Architecture

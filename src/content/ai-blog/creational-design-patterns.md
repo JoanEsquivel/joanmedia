@@ -2,7 +2,7 @@
 title: "Creational Design Patterns: Building Objects the Right Way"
 description: "A deep dive into nine creational design patterns — from Singleton and Factory Method to Dependency Injection and Object Pool — with real-world use cases and trade-offs."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - Creational Patterns
   - Factory Method

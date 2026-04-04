@@ -2,7 +2,7 @@
 title: "The Pattern Decision Framework: Choosing the Right Pattern"
 description: "A practical framework for selecting the right design pattern — with problem-to-pattern mappings, decision flowcharts, architecture layer guidance, and a learning path."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - Design Patterns
   - Software Architecture

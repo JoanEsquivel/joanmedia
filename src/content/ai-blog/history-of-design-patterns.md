@@ -2,7 +2,7 @@
 title: "The History of Design Patterns: From Architecture to Software"
 description: "Trace the arc of design patterns from Christopher Alexander's architectural work through the Gang of Four to modern microservices and cloud-native patterns."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - Design Patterns
   - Gang of Four

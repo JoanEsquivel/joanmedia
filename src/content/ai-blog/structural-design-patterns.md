@@ -2,7 +2,7 @@
 title: "Structural Design Patterns: Composing Objects into Larger Structures"
 description: "Master eleven structural design patterns — Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy and more — with comparisons and practical examples."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - Structural Patterns
   - Design Patterns

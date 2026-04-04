@@ -2,7 +2,7 @@
 title: "Behavioral Design Patterns: Managing Algorithms and Object Communication"
 description: "Explore fourteen behavioral design patterns — from Strategy and Observer to Visitor and Specification — with detailed implementations and comparisons."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - Behavioral Patterns
   - Design Patterns

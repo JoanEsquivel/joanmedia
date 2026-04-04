@@ -2,7 +2,7 @@
 title: "Real-World Design Patterns: Case Studies from Big Tech and Open Source"
 description: "See how Netflix, Google, Amazon, Meta, and Uber apply design patterns at scale — plus pattern evolution stories, failure modes, and industry survey data."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - Case Studies
   - Microservices

@@ -7,7 +7,7 @@ const aiBlogSchema = z.object({
     updatedDate: z.string().optional(),
     heroImage: z.string().optional(),
     badge: z.string().optional(),
-    category: z.enum(["qa", "ai", "frontend", "backend", "data", "cloud", "life-work-balance", "softskills"]),
+    category: z.enum(["qa", "ai", "frontend", "backend", "software-engineering", "data", "cloud", "life-work-balance", "softskills"]),
     tags: z.array(z.string()).refine(items => new Set(items).size === items.length, {
         message: 'tags must be unique',
     }).optional(),

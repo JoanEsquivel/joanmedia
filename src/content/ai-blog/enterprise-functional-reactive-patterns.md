@@ -2,7 +2,7 @@
 title: "Enterprise, Functional, and Reactive Patterns"
 description: "Deep dive into enterprise patterns from Fowler's PoEAA, functional programming patterns like monads and ADTs, and reactive resilience patterns including Circuit Breaker."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - Enterprise Patterns
   - Functional Programming

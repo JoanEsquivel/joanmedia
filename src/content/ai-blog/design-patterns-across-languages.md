@@ -2,7 +2,7 @@
 title: "Design Patterns Across Languages: How Paradigms Shape Patterns"
 description: "Understand how design patterns manifest differently in JavaScript, Go, Rust, and functional languages — and when language features make patterns invisible or unnecessary."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - Design Patterns
   - Go

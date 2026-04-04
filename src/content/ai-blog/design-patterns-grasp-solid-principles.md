@@ -2,7 +2,7 @@
 title: "Foundations: GRASP, SOLID, and the Principles Behind Patterns"
 description: "Explore the foundational principles behind design patterns — GRASP, SOLID, DRY, KISS, and YAGNI — and learn why understanding these transforms pattern application."
 pubDate: 2026-03-13
-category: "backend"
+category: "software-engineering"
 tags:
   - SOLID Principles
   - GRASP
