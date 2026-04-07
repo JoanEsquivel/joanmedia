@@ -216,7 +216,12 @@ const categories = Object.entries(AI_BLOG_CATEGORIES);
         }
         const dateA = a.dataset.date || '';
         const dateB = b.dataset.date || '';
-        return dateB.localeCompare(dateA);
+        const dateDiff = dateB.localeCompare(dateA);
+        if (dateDiff !== 0) return dateDiff;
+        if (a.dataset.series && b.dataset.series && a.dataset.series === b.dataset.series) {
+          return (parseInt(a.dataset.seriesOrder || '0') || 0) - (parseInt(b.dataset.seriesOrder || '0') || 0);
+        }
+        return 0;
       });
     }
 

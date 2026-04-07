@@ -14,7 +14,14 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   return categories.flatMap((category) => {
     const filtered = allPosts
       .filter((post) => post.data.category === category)
-      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+      .sort((a, b) => {
+        const dateDiff = b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+        if (dateDiff !== 0) return dateDiff;
+        if (a.data.series && b.data.series && a.data.series === b.data.series) {
+          return (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0);
+        }
+        return 0;
+      });
     return paginate(filtered, {
       params: { category },
       pageSize: 999,

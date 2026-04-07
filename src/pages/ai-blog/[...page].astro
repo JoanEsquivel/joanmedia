@@ -8,7 +8,14 @@ import type { GetStaticPathsOptions } from "astro";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getCollection("ai-blog");
-  posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  posts.sort((a, b) => {
+    const dateDiff = b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+    if (dateDiff !== 0) return dateDiff;
+    if (a.data.series && b.data.series && a.data.series === b.data.series) {
+      return (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0);
+    }
+    return 0;
+  });
   return paginate(posts, { pageSize: 999 });
 }
 
