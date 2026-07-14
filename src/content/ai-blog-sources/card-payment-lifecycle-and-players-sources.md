@@ -1,0 +1,33 @@
+---
+postSlug: "card-payment-lifecycle-and-players"
+sources:
+  - title: "Quartr — The Payments Value Chain: A Complex Ecosystem"
+    url: "https://quartr.com/insights/company-research/the-payments-value-chain-a-complex-ecosystem"
+    accessDate: "2026-07-14"
+  - title: "Stripe — Payment processor vs. merchant acquirer"
+    url: "https://stripe.com/resources/more/payment-processor-vs-merchant-acquirer"
+    accessDate: "2026-07-14"
+  - title: "GR4VY — Card network vs. payment processor: essential insights"
+    url: "https://gr4vy.com/posts/card-network-vs-payment-processor-essential-insights/"
+    accessDate: "2026-07-14"
+  - title: "Chargeflow — What is a Payment Service Provider (PSP)?"
+    url: "https://www.chargeflow.io/blog/payment-service-provider-psp"
+    accessDate: "2026-07-14"
+  - title: "Checkout.com — Merchant acquirer vs. payment processor"
+    url: "https://www.checkout.com/blog/merchant-acquirer-vs-payment-processor"
+    accessDate: "2026-07-14"
+  - title: "Concryt — Understanding payment authorization, clearing, and settlement"
+    url: "https://concryt.io/blog/understanding-payment-authorization-clearing-and-settlement"
+    accessDate: "2026-07-14"
+  - title: "Worldpay — The credit card lifecycle explained"
+    url: "https://www.worldpay.com/en/insights/articles/the-credit-card-lifecycle-explained"
+    accessDate: "2026-07-14"
+  - title: "Checkout.com — Clearing vs. settlement"
+    url: "https://www.checkout.com/blog/clearing-vs-settlement"
+    accessDate: "2026-07-14"
+  - title: "Plaid — What are payment rails?"
+    url: "https://plaid.com/resources/payments/payment-rails/"
+    accessDate: "2026-07-14"
+---
+
+Sources compiled by the blog-researcher agent for the "A Builder's Guide to Fintech and Payments" series (research current as of July 2026). The four-party model and player roles come from Stripe, Quartr, GR4VY, Chargeflow, and Checkout.com; the authorization/clearing/settlement lifecycle from Concryt, Worldpay, and Checkout.com; and the dynamic-routing/orchestration framing from Plaid.
