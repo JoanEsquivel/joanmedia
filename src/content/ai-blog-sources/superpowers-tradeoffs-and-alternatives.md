@@ -1,0 +1,30 @@
+---
+postSlug: "superpowers-tradeoffs-and-alternatives"
+sources:
+  - title: "Hacker News: Superpowers 6 Discussion — primary source for the criticism section"
+    url: "https://news.ycombinator.com/item?id=48739459"
+    accessDate: "2026-07-14"
+  - title: "MCP.Directory: Superpowers — Still Worth It in 2026? (r/ClaudeCode debate summary and cost comparison)"
+    url: "https://mcp.directory/blog/superpowers-skill-worth-it-2026"
+    accessDate: "2026-07-14"
+  - title: "Anthropic Docs: Agent Skills Overview — progressive disclosure token costs"
+    url: "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview"
+    accessDate: "2026-07-14"
+  - title: "Jesse Vincent: Superpowers 6 — cross-harness eval numbers and caveats"
+    url: "https://blog.fsck.com/2026/06/15/Superpowers-6/"
+    accessDate: "2026-07-14"
+  - title: "Claude Code Docs: Extend Claude with Skills — the native-skills alternative"
+    url: "https://code.claude.com/docs/en/skills"
+    accessDate: "2026-07-14"
+  - title: "anthropics/skills (GitHub) — Anthropic's capabilities-focused skill collection"
+    url: "https://github.com/anthropics/skills"
+    accessDate: "2026-07-14"
+  - title: "GitHub API: obra/superpowers releases — v5.0.4, v5.0.6, v6.0.0, and v6.1.0 optimization history"
+    url: "https://api.github.com/repos/obra/superpowers/releases"
+    accessDate: "2026-07-14"
+  - title: "Hacker News: A Rave Review of Superpowers — earlier positive community reception"
+    url: "https://news.ycombinator.com/item?id=47623101"
+    accessDate: "2026-07-14"
+---
+
+Sources compiled by the blog-researcher agent (research-claude-superpowers/resources.md). Community sentiment is drawn primarily from the June 2026 Superpowers 6 Hacker News thread; the 9%-cheaper / 14%-fewer-tokens controlled comparison is a secondary community measurement reported by MCP.Directory and is flagged as such in the article. Release-note claims (v5.0.6 review-loop removal, v6.1.0 bootstrap compression) were verified against the GitHub releases feed on 2026-07-14. anthropics/skills star count (161,148) verified via the GitHub API the same day.

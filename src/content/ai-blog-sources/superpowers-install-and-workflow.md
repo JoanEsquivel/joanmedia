@@ -1,0 +1,30 @@
+---
+postSlug: "superpowers-install-and-workflow"
+sources:
+  - title: "obra/superpowers (GitHub) — README: install commands and 7-step workflow"
+    url: "https://github.com/obra/superpowers"
+    accessDate: "2026-07-14"
+  - title: "obra/superpowers-marketplace (GitHub) — the author's alternative install path"
+    url: "https://github.com/obra/superpowers-marketplace"
+    accessDate: "2026-07-14"
+  - title: "Claude Code Docs: Create Plugins — /plugin manager, namespacing, /reload-plugins"
+    url: "https://code.claude.com/docs/en/plugins"
+    accessDate: "2026-07-14"
+  - title: "Jesse Vincent: Superpowers — How I'm Using Coding Agents in October 2025"
+    url: "https://blog.fsck.com/2025/10/09/superpowers/"
+    accessDate: "2026-07-14"
+  - title: "Jesse Vincent: Superpowers 6 — merged reviewer rewrite and eval results"
+    url: "https://blog.fsck.com/2026/06/15/Superpowers-6/"
+    accessDate: "2026-07-14"
+  - title: "Hacker News: Superpowers 6 Discussion — community experience with TDD enforcement"
+    url: "https://news.ycombinator.com/item?id=48739459"
+    accessDate: "2026-07-14"
+  - title: "GitHub API: obra/superpowers releases — v6.1.1, v6.0.3, and v5.1.0 command removals"
+    url: "https://api.github.com/repos/obra/superpowers/releases"
+    accessDate: "2026-07-14"
+  - title: "DataCamp: Claude Code Superpowers Tutorial — independent workflow walkthrough"
+    url: "https://www.datacamp.com/tutorial/claude-code-superpowers"
+    accessDate: "2026-07-14"
+---
+
+Sources compiled by the blog-researcher agent (research-claude-superpowers/resources.md). All install commands and workflow steps were verified against the obra/superpowers README and the v6.1.1 release notes on 2026-07-14; the stale-tutorial warning (legacy /brainstorm, /write-plan, /execute-plan commands) is grounded in the v5.1.0 release entry. The DataCamp tutorial served as independent confirmation of the brainstorm/plan/execute flow.

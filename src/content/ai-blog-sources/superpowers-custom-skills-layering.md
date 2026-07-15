@@ -1,0 +1,30 @@
+---
+postSlug: "superpowers-custom-skills-layering"
+sources:
+  - title: "Claude Code Docs: Extend Claude with Skills — locations, precedence, disable-model-invocation"
+    url: "https://code.claude.com/docs/en/skills"
+    accessDate: "2026-07-14"
+  - title: "Anthropic Docs: Agent Skills Overview — metadata token costs and security guidance"
+    url: "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview"
+    accessDate: "2026-07-14"
+  - title: "Claude Code Docs: Create Plugins — plugin skill namespacing"
+    url: "https://code.claude.com/docs/en/plugins"
+    accessDate: "2026-07-14"
+  - title: "Jesse Vincent: Superpowers — How I'm Using Coding Agents in October 2025 (bootstrap design)"
+    url: "https://blog.fsck.com/2025/10/09/superpowers/"
+    accessDate: "2026-07-14"
+  - title: "anthropics/skills (GitHub) — skill-creator and Anthropic's public skill collection"
+    url: "https://github.com/anthropics/skills"
+    accessDate: "2026-07-14"
+  - title: "obra/superpowers (GitHub) — writing-skills meta-skill and MIT license"
+    url: "https://github.com/obra/superpowers"
+    accessDate: "2026-07-14"
+  - title: "GitHub API: obra/superpowers releases — v5.0.6 regression-testing notes"
+    url: "https://api.github.com/repos/obra/superpowers/releases"
+    accessDate: "2026-07-14"
+  - title: "Anthropic Engineering: Equipping Agents for the Real World with Agent Skills"
+    url: "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills"
+    accessDate: "2026-07-14"
+---
+
+Sources compiled by the blog-researcher agent (research-claude-superpowers/resources.md). Skill locations, precedence rules (enterprise > personal > project; plugin skills namespaced so they cannot conflict), and the disable-model-invocation flag were verified against the Claude Code skills documentation on 2026-07-14. Quoted docs guidance ("treat like installing software", the CLAUDE.md facts-vs-procedures distinction) comes from the Anthropic documentation pages listed above.
