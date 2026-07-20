@@ -31,7 +31,30 @@ export type AIBlogSourcesSchema = z.infer<typeof aiBlogSourcesSchema>;
 const aiBlogCollection = defineCollection({ schema: aiBlogSchema });
 const aiBlogSourcesCollection = defineCollection({ schema: aiBlogSourcesSchema });
 
+// --- add below the existing aiBlogSourcesSchema block ---
+const curiositiesSchema = z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.string().optional(),
+    heroImage: z.string().optional(),
+    topic: z.enum([
+        "music", "food", "exercise", "travel", "books",
+        "history", "psychology", "games", "science", "brainstorming",
+    ]),
+    tags: z.array(z.string()).refine(items => new Set(items).size === items.length, {
+        message: 'tags must be unique',
+    }).optional(),
+    series: z.string().optional(),
+    seriesOrder: z.number().optional(),
+});
+
+export type CuriositiesSchema = z.infer<typeof curiositiesSchema>;
+
+const curiositiesCollection = defineCollection({ schema: curiositiesSchema });
+
 export const collections = {
     'ai-blog': aiBlogCollection,
     'ai-blog-sources': aiBlogSourcesCollection,
+    'curiosities': curiositiesCollection,
 }
