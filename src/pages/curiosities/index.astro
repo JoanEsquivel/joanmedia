@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CuriosityCard from "../../components/CuriosityCard.astro";
+import CuriosityTopicTile from "../../components/CuriosityTopicTile.astro";
+import { getCollection } from "astro:content";
+import createSlug from "../../lib/createSlug";
+import { CURIOSITIES_TOPICS } from "../../lib/curiositiesTopics";
+
+const allPosts = await getCollection("curiosities");
+const sorted = [...allPosts].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const latest = sorted.slice(0, 3);
+
+const counts = new Map<string, number>();
+for (const post of allPosts) {
+  counts.set(post.data.topic, (counts.get(post.data.topic) || 0) + 1);
+}
+
+const topics = Object.entries(CURIOSITIES_TOPICS).map(([key, t]) => ({
+  key,
+  label: t.label,
+  icon: t.icon,
+  count: counts.get(key) || 0,
+}));
+---
+
+<BaseLayout title="Curiosities" activeItemID="curiosities">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold tracking-tight">Curiosities</h1>
+    <p class="text-base-content/70 mt-2 max-w-2xl">
+      Things I'm into outside of QA — music, food, exercise, books, and the odd rabbit hole.
+      Notes to my future self, shared openly.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-12">
+    {topics.map((t) => (
+      <CuriosityTopicTile topicKey={t.key} label={t.label} icon={t.icon} count={t.count} />
+    ))}
+  </div>
+
+  {latest.length > 0 && (
+    <section>
+      <h2 class="text-sm uppercase tracking-wide text-base-content/70 mb-4">Latest across all topics</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {latest.map((post) => (
+          <CuriosityCard
+            title={post.data.title}
+            img={post.data.heroImage}
+            desc={post.data.description}
+            url={"/curiosities/" + createSlug(post.data.title, post.slug)}
+            tags={post.data.tags}
+            pubDate={post.data.pubDate.toISOString()}
+            topic={post.data.topic}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+</BaseLayout>

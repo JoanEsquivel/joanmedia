@@ -1,0 +1,50 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import { type CuriositiesSchema } from "../../content/config";
+import CuriosityPostLayout from "../../layouts/CuriosityPostLayout.astro";
+import createSlug from "../../lib/createSlug";
+
+export async function getStaticPaths() {
+  const postEntries = await getCollection("curiosities");
+  return postEntries.map((entry) => ({
+    params: { slug: createSlug(entry.data.title, entry.slug) },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"curiosities">;
+}
+
+const { entry } = Astro.props;
+const post: CuriositiesSchema = entry.data;
+const { Content } = await entry.render();
+
+let seriesPosts: Array<{ title: string; url: string; order: number }> = [];
+if (post.series) {
+  const allPosts = await getCollection("curiosities");
+  seriesPosts = allPosts
+    .filter((p) => p.data.series === post.series)
+    .map((p) => ({
+      title: p.data.title,
+      url: "/curiosities/" + createSlug(p.data.title, p.slug),
+      order: p.data.seriesOrder || 0,
+    }))
+    .sort((a, b) => a.order - b.order);
+}
+---
+
+<CuriosityPostLayout
+  title={post.title}
+  description={post.description}
+  pubDate={post.pubDate}
+  heroImage={post.heroImage}
+  updatedDate={post.updatedDate}
+  topic={post.topic}
+  tags={post.tags}
+  seriesName={post.series}
+  seriesOrder={post.seriesOrder}
+  seriesPosts={seriesPosts.length > 1 ? seriesPosts : undefined}
+>
+  <Content />
+</CuriosityPostLayout>

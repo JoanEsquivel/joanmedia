@@ -1,0 +1,97 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import CuriosityCard from "@components/CuriosityCard.astro";
+import CuriosityPagination from "@components/CuriosityPagination.astro";
+import { getCollection } from "astro:content";
+import createSlug from "../../../../lib/createSlug";
+import { CURIOSITIES_TOPICS } from "../../../../lib/curiositiesTopics";
+import type { GetStaticPathsOptions } from "astro";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const allPosts = await getCollection("curiosities");
+  const topics = Object.keys(CURIOSITIES_TOPICS);
+
+  return topics.flatMap((topic) => {
+    const filtered = allPosts
+      .filter((post) => post.data.topic === topic)
+      .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+    // Guarantee every topic resolves to a page 1, even with zero posts yet
+    // (topic tiles always link here). Don't rely on paginate([]) emitting a page.
+    if (filtered.length === 0) {
+      return [{
+        params: { topic, page: undefined },
+        props: {
+          page: {
+            data: [],
+            currentPage: 1,
+            lastPage: 1,
+            url: { current: `/curiosities/topic/${topic}`, prev: undefined, next: undefined },
+            start: 0,
+            end: 0,
+            size: 6,
+            total: 0,
+          },
+        },
+      }];
+    }
+
+    return paginate(filtered, {
+      params: { topic },
+      pageSize: 6,
+    });
+  });
+}
+
+const { page } = Astro.props;
+const params = Astro.params;
+const posts = page.data;
+const topic = params.topic as keyof typeof CURIOSITIES_TOPICS;
+const t = CURIOSITIES_TOPICS[topic];
+const basePath = `/curiosities/topic/${topic}`;
+---
+
+<BaseLayout title={"Curiosities - " + t.label} activeItemID="curiosities">
+  <nav aria-label="Breadcrumb" class="text-sm breadcrumbs mb-4">
+    <ul>
+      <li><a href="/curiosities/">Curiosities</a></li>
+      <li><span class="text-base-content/70">{t.label}</span></li>
+    </ul>
+  </nav>
+
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold tracking-tight flex items-center gap-3">
+      <span aria-hidden="true">{t.icon}</span> {t.label}
+    </h1>
+    <p class="text-base-content/70 mt-2">{t.description}</p>
+  </div>
+
+  {posts.length === 0 ? (
+    <div class="bg-base-200 border-l-4 border-secondary w-full p-4">
+      <p class="font-bold">Nothing here yet</p>
+      <p>No posts in {t.label} yet. Check back later!</p>
+    </div>
+  ) : (
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map((post: any) => (
+        <CuriosityCard
+          title={post.data.title}
+          img={post.data.heroImage}
+          desc={post.data.description}
+          url={"/curiosities/" + createSlug(post.data.title, post.slug)}
+          tags={post.data.tags}
+          pubDate={post.data.pubDate.toISOString()}
+          topic={post.data.topic}
+        />
+      ))}
+    </div>
+  )}
+
+  <CuriosityPagination
+    currentPage={page.currentPage}
+    lastPage={page.lastPage}
+    prevUrl={page.url.prev}
+    nextUrl={page.url.next}
+    basePath={basePath}
+  />
+</BaseLayout>
