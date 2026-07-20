@@ -69,20 +69,30 @@ mirroring `aiBlogCategories.ts`. Adding a topic later means editing this file
 | Route | File | Purpose |
 |---|---|---|
 | `/curiosities/` | `src/pages/curiosities/index.astro` | Landing hub: 10 topic tiles with live post counts + "Latest across all topics" feed (3 most recent) |
-| `/curiosities/topic/[topic]/[...page].astro` | same | Paginated category page, 6 posts/page via Astro `paginate()`; scoped search + sort + optional tag filter |
+| `/curiosities/topic/[topic]/[...page].astro` | same | Paginated category page, 6 posts/page via Astro `paginate()`, newest-first |
 | `/curiosities/[slug].astro` | same | Minimal post reading view |
 
 Each pagination page is its own static URL (`/curiosities/topic/music/2`), so
 page weight stays flat regardless of total post count.
+
+**Architecture note (resolved during planning):** This uses Astro's official
+`paginate()` helper with **nested pagination by topic** — the framework-idiomatic
+pattern, the same one Astro's own docs site and Starlight use. Category pages are
+**browse-only** (no client-side search box, no live sort toggle) because true
+static pagination and full-collection client search pull against each other in
+SSG. The topic hub plus real pagination is the intended way to find content.
+Full-text search, when the library grows enough to need it, is a clean future
+add via **Pagefind** (the framework-blessed static-search tool Starlight ships) —
+see Out of scope.
 
 ### Components (new, `Curiosity*`-prefixed; parallel to AI Blog, no shared code)
 
 - `CuriosityCard.astro` — card with Astro `<Image />` hero, topic badge, title,
   date, optional tag pills.
 - `CuriosityTopicTile.astro` — landing-page tile: emoji, label, post count.
-- `CuriosityFilterBar.astro` — per-topic search + sort; a tag-filter pill that
-  **renders only when the current topic has tagged posts**. Vanilla JS, re-inits
-  on `astro:after-swap`, `aria-live` on results count.
+- `CuriosityPagination.astro` — static prev/next + numbered page links for the
+  category route, driven by Astro's `page` object. Pure server-rendered links, no
+  client JS.
 - `CuriositySeriesNav.astro` — lightweight prev/next series navigation, rendered
   only when a post declares a `series`.
 - `CuriosityPostLayout.astro` (in `src/layouts/`) — minimal reading layout:
@@ -101,8 +111,8 @@ page weight stays flat regardless of total post count.
 
 - **Landing:** tiles show per-topic counts computed at build time; "Latest" feed
   shows the 3 most recent posts across all topics with topic badges.
-- **Category page:** search filters visible posts by title/description within the
-  topic; sort toggles newest/oldest; tag filter appears only when applicable.
+- **Category page:** shows that topic's posts newest-first, 6 per static page,
+  with server-rendered pagination. Browse-only (no search/sort in v1).
 - **Post:** minimal render; tags and series nav appear only when present in
   frontmatter.
 
@@ -111,14 +121,17 @@ page weight stays flat regardless of total post count.
 - Astro `<Image />` for all images (`width`/`height`, `format="webp"`, lazy).
 - `interface Props` on every component; destructure with defaults.
 - Accessibility: global skip-link already covers new pages; semantic landmarks;
-  one `<h1>` per page; `aria-live="polite"` on dynamic filter results;
-  `role="search"` on search; pagination wrapped in `<nav aria-label>` with
-  `aria-current="page"`; WCAG-safe text contrast (`text-base-content/70`+).
+  one `<h1>` per page; pagination wrapped in `<nav aria-label>` with
+  `aria-current="page"` on the active page and `aria-disabled` on unavailable
+  prev/next; WCAG-safe text contrast (`text-base-content/70`+).
 - Zero JS frameworks; vanilla `<script>` re-initialized on `astro:after-swap`.
 - Both `night` (dark, default) and `lofi` (light) themes supported.
 
 ## Out of scope (v1)
 
+- Full-text search — add later via **Pagefind** (Astro/Starlight's static-search
+  tool); it indexes at build time and needs no change to the collection or routes.
+- Live newest/oldest sort toggle on category pages (posts ship newest-first).
 - Sources / references list (the AI Blog `sources` companion collection).
 - RSS feed for Curiosities.
 - Home-page integration (a "Latest Curiosities" block on `/`).
