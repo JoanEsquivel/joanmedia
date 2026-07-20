@@ -1,0 +1,57 @@
+---
+import { Image } from "astro:assets";
+import { CURIOSITIES_TOPICS, type CuriositiesTopic } from "../lib/curiositiesTopics";
+
+interface Props {
+  title: string;
+  img?: string;
+  desc: string;
+  url: string;
+  tags?: string[];
+  pubDate?: string;
+  topic: CuriositiesTopic;
+}
+
+const { title, img, desc, url, tags = [], pubDate, topic } = Astro.props;
+
+const formattedDate = pubDate
+  ? new Date(pubDate).toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" })
+  : "";
+const t = CURIOSITIES_TOPICS[topic];
+---
+
+<article class="card bg-base-200 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group overflow-hidden">
+  <a href={url} class="block focus-visible:outline-offset-4">
+    {img && (
+      <figure class="h-48 overflow-hidden relative">
+        <Image
+          src={img}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          width={400}
+          height={192}
+          format="webp"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <span class="badge badge-primary absolute top-2 right-2 gap-1">
+          <span aria-hidden="true">{t.icon}</span> {t.label}
+        </span>
+      </figure>
+    )}
+    <div class="card-body p-4">
+      {formattedDate && (
+        <time datetime={pubDate} class="text-xs text-base-content/70">{formattedDate}</time>
+      )}
+      <h2 class="card-title text-lg">{title}</h2>
+      <p class="text-sm text-base-content/70 line-clamp-2">{desc}</p>
+      {tags.length > 0 && (
+        <div class="card-actions mt-2">
+          {tags.map((tag: string) => (
+            <span class="badge badge-outline badge-sm">{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  </a>
+</article>

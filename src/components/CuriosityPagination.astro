@@ -1,0 +1,36 @@
+---
+interface Props {
+  currentPage: number;
+  lastPage: number;
+  prevUrl?: string;
+  nextUrl?: string;
+  basePath: string;
+}
+
+const { currentPage, lastPage, prevUrl, nextUrl, basePath } = Astro.props;
+
+const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
+const pageHref = (n: number) => (n === 1 ? basePath : `${basePath}/${n}`);
+---
+
+{lastPage > 1 && (
+  <nav class="flex items-center justify-center gap-2 mt-10 mb-8" aria-label="Curiosities pagination">
+    {prevUrl ? (
+      <a href={prevUrl} class="btn btn-sm" aria-label="Previous page"><span aria-hidden="true">&lsaquo;</span></a>
+    ) : (
+      <span class="btn btn-sm btn-disabled" aria-disabled="true" aria-label="Previous page"><span aria-hidden="true">&lsaquo;</span></span>
+    )}
+    {pages.map((n) => (
+      n === currentPage ? (
+        <span class="btn btn-sm btn-primary" aria-current="page" aria-label={`Page ${n}`}>{n}</span>
+      ) : (
+        <a href={pageHref(n)} class="btn btn-sm" aria-label={`Page ${n}`}>{n}</a>
+      )
+    ))}
+    {nextUrl ? (
+      <a href={nextUrl} class="btn btn-sm" aria-label="Next page"><span aria-hidden="true">&rsaquo;</span></a>
+    ) : (
+      <span class="btn btn-sm btn-disabled" aria-disabled="true" aria-label="Next page"><span aria-hidden="true">&rsaquo;</span></span>
+    )}
+  </nav>
+)}
