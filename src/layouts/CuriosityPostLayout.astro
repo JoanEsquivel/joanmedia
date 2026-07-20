@@ -1,0 +1,81 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import CuriositySeriesNav from "../components/CuriositySeriesNav.astro";
+import { Image } from "astro:assets";
+import { CURIOSITIES_TOPICS, type CuriositiesTopic } from "../lib/curiositiesTopics";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+
+interface SeriesPost {
+  title: string;
+  url: string;
+  order: number;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: string;
+  heroImage?: string;
+  topic: CuriositiesTopic;
+  tags?: string[];
+  seriesName?: string;
+  seriesOrder?: number;
+  seriesPosts?: SeriesPost[];
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  topic,
+  tags = [],
+  seriesName,
+  seriesOrder,
+  seriesPosts,
+} = Astro.props;
+
+dayjs.extend(localizedFormat);
+const displayDate = dayjs(pubDate).format("ll");
+const t = CURIOSITIES_TOPICS[topic];
+---
+
+<BaseLayout title={title} description={description} image={heroImage} ogType="article" activeItemID="curiosities">
+  <div class="max-w-3xl mx-auto">
+    <nav aria-label="Breadcrumb" class="text-sm breadcrumbs mb-4">
+      <ul>
+        <li><a href="/curiosities/">Curiosities</a></li>
+        <li><a href={`/curiosities/topic/${topic}`}>{t.label}</a></li>
+        <li><span class="text-base-content/70">{title}</span></li>
+      </ul>
+    </nav>
+
+    <a href="/curiosities/" class="btn btn-ghost btn-sm mb-6"><span aria-hidden="true">&larr;</span> Back to Curiosities</a>
+
+    <article class="prose prose-lg max-w-none prose-img:mx-auto prose-headings:tracking-tight prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
+      {heroImage && <Image width={750} height={422} format="webp" src={heroImage} alt={title} class="w-full mb-6 rounded-lg" />}
+      <div class="flex items-center gap-2 mb-2 not-prose">
+        <span class="badge badge-primary gap-1"><span aria-hidden="true">{t.icon}</span> {t.label}</span>
+      </div>
+      <h1 class="title my-2 text-4xl font-bold">{title}</h1>
+      {pubDate && <time datetime={pubDate.toISOString()} class="text-base-content/70">{displayDate}</time>}
+      {tags.length > 0 && (
+        <div class="not-prose mt-2 flex flex-wrap gap-2">
+          {tags.map((tag) => <span class="badge badge-outline">{tag}</span>)}
+        </div>
+      )}
+      {updatedDate && (
+        <div>Last updated on <time>{updatedDate}</time></div>
+      )}
+      <div class="divider my-2"></div>
+      <slot />
+    </article>
+
+    {seriesName && seriesOrder && seriesPosts && seriesPosts.length > 1 && (
+      <CuriositySeriesNav seriesName={seriesName} currentOrder={seriesOrder} posts={seriesPosts} />
+    )}
+  </div>
+</BaseLayout>
