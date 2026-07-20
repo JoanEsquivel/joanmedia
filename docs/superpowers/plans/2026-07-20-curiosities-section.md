@@ -935,6 +935,158 @@ git commit -m "feat(curiosities): add Curiosities to navbar and footer"
 
 ---
 
+### Task 6: "Publish a Curiosities post" project skill
+
+Adds a repository skill that turns a ready-written Curiosities post into a correctly-placed, correctly-front-mattered file. Documentation deliverable — verified by cross-checking against the real schema/topics and by dry-running a sample post through the build. Do this task LAST, after Tasks 1–5 are merged/committed, so the skill describes the shipped reality.
+
+**Files:**
+- Create: `.claude/skills/publish-curiosity-post/SKILL.md`
+
+**Interfaces:**
+- Consumes (must stay accurate to): `src/lib/curiositiesTopics.ts` (the 10 topic keys), `src/content/config.ts` (the `curiosities` Zod schema fields), `src/config.ts` (`GENERATE_SLUG_FROM_TITLE`), `astro.config.mjs` (`image.domains`), and the routes from Tasks 2–4.
+- Produces: a user-invocable/auto-triggering skill; no code consumes it.
+
+- [ ] **Step 1: Confirm the source-of-truth values before writing**
+
+Run: `sed -n '1,20p' src/lib/curiositiesTopics.ts && echo "---SCHEMA---" && sed -n '/curiositiesSchema/,/^});/p' src/content/config.ts && echo "---SLUG---" && grep GENERATE_SLUG src/config.ts && echo "---IMG DOMAINS---" && grep -A6 "domains" astro.config.mjs`
+Expected: prints the 10 topic keys, the schema field list, `GENERATE_SLUG_FROM_TITLE = true`, and the whitelisted image domains. Use these EXACT values in the SKILL.md — do not invent field names or topic keys.
+
+- [ ] **Step 2: Create the skill file**
+
+Create `.claude/skills/publish-curiosity-post/SKILL.md` with this content:
+
+````markdown
+---
+name: publish-curiosity-post
+description: Use when adding or publishing a ready-written post to the Curiosities section of joanmedia.dev. Explains exactly where the file goes, which frontmatter fields are required vs optional, the topic keys, hero-image rules, and how to verify it before committing. Trigger phrases include "publish a curiosities post", "add a curiosity post", "new music/food/travel post".
+---
+
+# Publish a Curiosities Post
+
+Use this when the post text is already written and you just need to place it and format it correctly for the Curiosities section.
+
+## 1. Where the file goes
+
+All Curiosities posts live **flat in one folder** — routing is by the `topic` frontmatter field, NOT by subfolder:
+
+```
+src/content/curiosities/<your-file-name>.md
+```
+
+- Do **not** create per-topic subfolders. `src/content/curiosities/my-post.md` with `topic: "music"` is automatically listed under Music.
+- Use a short, kebab-case, descriptive filename ending in `.md` (or `.mdx` if you need components).
+- The **filename is not the URL.** Because `GENERATE_SLUG_FROM_TITLE = true` (`src/config.ts`), the public URL is `/curiosities/<slug-of-title>`. Keep the filename close to the title so the folder stays easy to scan.
+
+## 2. Required frontmatter
+
+Every post must have these four fields:
+
+```yaml
+---
+title: "Your post title"                 # becomes the URL slug
+description: "One or two sentences shown on the card and in previews."
+pubDate: 2026-07-20                       # YYYY-MM-DD (unquoted)
+topic: "music"                            # exactly one key from the list below
+---
+```
+
+**Valid `topic` keys (pick exactly one):**
+`music`, `food`, `exercise`, `travel`, `books`, `history`, `psychology`, `games`, `science`, `brainstorming`
+
+A value outside this list fails the build.
+
+## 3. Optional frontmatter
+
+Add only what you need:
+
+```yaml
+heroImage: "https://images.unsplash.com/photo-XXXX?w=750&h=422&fit=crop"
+tags: ["live", "vinyl"]        # must be unique; shown as pills; no tag pages in v1
+series: "Japan Diaries"        # group multi-part posts
+seriesOrder: 1                 # required if `series` is set; 1-based
+updatedDate: "2026-08-01"      # string; shows a "Last updated" line
+```
+
+- **heroImage** — optional. If remote, the host MUST be whitelisted in `astro.config.mjs` `image.domains` (currently `images.unsplash.com`, `logowik.com`, `www.w3.org`). To use another host, add it there first. Recommended size ~750×422. Without a hero image the card renders text-only (no image band).
+- **tags** — array of unique strings. Duplicate tags fail the build.
+- **series / seriesOrder** — set BOTH to make a post part of a series. Prev/next series navigation only appears once **two or more** posts share the same `series` string. `seriesOrder` controls their order.
+- **updatedDate** — a string, not a coerced date.
+
+## 4. Body
+
+Write the post in Markdown after the frontmatter. The first `#`-level structure is up to you; the layout already renders the title as the page `<h1>`, so start body headings at `##`.
+
+## 5. Verify before committing
+
+Run the build — it validates the frontmatter against the schema:
+
+```bash
+pnpm run build   # if pnpm isn't on PATH: node_modules/.bin/astro build
+```
+
+Then confirm the post is placed correctly:
+
+```bash
+ls dist/curiosities/<slug-of-title>/index.html          # the post page exists
+ls dist/curiosities/topic/<topic>/index.html            # it appears under its topic
+```
+
+Optionally `pnpm run dev` and visit `/curiosities/topic/<topic>` to eyeball the card, and the post page in both night and lofi themes.
+
+## 6. Common mistakes
+
+- Wrong or misspelled `topic` (must be one of the 10 keys) → build fails.
+- Remote `heroImage` from a non-whitelisted host → build fails until you add the domain to `astro.config.mjs`.
+- `series` without `seriesOrder` (or only one post in the series) → no series navigation renders.
+- Quoting `pubDate` is fine, but keep it `YYYY-MM-DD`.
+- Duplicate entries in `tags` → build fails.
+````
+
+- [ ] **Step 3: Cross-check the skill against the real code**
+
+Run:
+```bash
+for k in music food exercise travel books history psychology games science brainstorming; do
+  grep -q "\"$k\"" src/content/config.ts || echo "MISSING topic in config: $k"
+  grep -q "$k" .claude/skills/publish-curiosity-post/SKILL.md || echo "MISSING topic in skill: $k"
+done
+echo "topic cross-check done"
+grep -q "GENERATE_SLUG_FROM_TITLE = true" src/config.ts && echo "slug fact OK"
+grep -q "images.unsplash.com" astro.config.mjs && echo "img domain fact OK"
+```
+Expected: no `MISSING ...` lines, `topic cross-check done`, `slug fact OK`, `img domain fact OK`. Fix any mismatch in the SKILL.md so it matches the code exactly.
+
+- [ ] **Step 4: Dry-run a sample post through the build, then remove it**
+
+Prove the instructions actually work end-to-end:
+```bash
+cat > src/content/curiosities/skilltest-sample.md <<'MD'
+---
+title: "Skill test sample post"
+description: "Temporary post to verify the publishing skill instructions."
+pubDate: 2026-07-20
+topic: "science"
+tags: ["temp"]
+---
+Temporary body for verification.
+MD
+pnpm run build || node_modules/.bin/astro build
+ls dist/curiosities/skill-test-sample-post/index.html && echo "sample built OK"
+ls dist/curiosities/topic/science/index.html && echo "listed under topic OK"
+rm src/content/curiosities/skilltest-sample.md
+```
+Expected: `sample built OK` and `listed under topic OK`, confirming a post authored purely by following the skill lands correctly. The sample file is deleted at the end — confirm `git status` shows only the new SKILL.md staged, no `skilltest-sample.md`.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add .claude/skills/publish-curiosity-post/SKILL.md
+git status --porcelain   # verify ONLY the SKILL.md is staged; no sample post lingering
+git commit -m "docs(curiosities): add publish-curiosity-post project skill"
+```
+
+---
+
 ## Verification summary (whole feature)
 
 After all tasks, from a clean `pnpm run build`:
