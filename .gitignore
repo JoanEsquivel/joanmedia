@@ -22,5 +22,5 @@ pnpm-debug.log*
 .astro/
 
 
-.claude.superpowers/
+.superpowers/
 .claude/settings.local.json

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4 pages: Home, Conferences, AI Blog, and CV. Built with Astro, styled with TailwindCSS v3 + DaisyUI v4, using a top navbar layout with dark/light theme toggle.
+Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 5 pages: Home, Conferences, AI Blog, Curiosities, and CV. Built with Astro, styled with TailwindCSS v3 + DaisyUI v4, using a top navbar layout with dark/light theme toggle.
 
 ## Development Commands
 
@@ -26,7 +26,7 @@ Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4
 - `src/components/`: Reusable Astro components (Navbar, AIBlogCard, AIBlogFilterBar, Footer, etc.)
 - `src/layouts/`: Page layouts (BaseLayout, AIPostLayout)
 - `src/pages/`: Route-based pages (index, conferences, cv, ai-blog/*, 404)
-- `src/content/`: Content collections — ai-blog, ai-blog-sources
+- `src/content/`: Content collections — ai-blog, ai-blog-sources, curiosities
 - `src/config.ts`: Global site configuration (titles, descriptions, feature toggles)
 - `src/styles/global.css`: Global styles, animations, and accessibility utilities
 - `public/`: Static assets (images, favicon, etc.)
@@ -34,9 +34,12 @@ Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4
 ### Content Management
 - **AI Blog**: Markdown files in `src/content/ai-blog/` with category-based organization (qa, ai, frontend, backend, data, cloud, life-work-balance, softskills)
 - **AI Blog Sources**: Companion files in `src/content/ai-blog-sources/` with matching filenames, linked via `postSlug` field
-- **Content schemas**: Defined in `src/content/config.ts` using Zod validation — ai-blog and ai-blog-sources collections
+- **Curiosities**: Personal-interest posts (music, food, exercise, travel, books, history, psychology, games, science, brainstorming) as markdown in `src/content/curiosities/` — a single flat folder, routed by the `topic` frontmatter field (no per-topic subfolders). Minimal by default; optional `tags` and `series`/`seriesOrder`. Fully separate from the AI Blog.
+- **Content schemas**: Defined in `src/content/config.ts` using Zod validation — ai-blog, ai-blog-sources, and curiosities collections
 - **Slug generation**: Controlled by `GENERATE_SLUG_FROM_TITLE` in config
 - **Category config**: `src/lib/aiBlogCategories.ts` defines labels, icons, and descriptions for AI blog categories
+- **Topic config**: `src/lib/curiositiesTopics.ts` defines labels, icons, and descriptions for the 10 Curiosities topics — to add a topic, add it there AND to the `topic` Zod enum in `src/content/config.ts`
+- **Publishing a Curiosities post**: see the `publish-curiosity-post` skill (`.claude/skills/publish-curiosity-post/SKILL.md`) for file placement, required/optional frontmatter, and gotchas
 
 ### Key Configuration Files
 - `astro.config.mjs`: Astro config with MDX, sitemap, TailwindCSS integrations, and `image.domains` whitelist
@@ -50,10 +53,11 @@ Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4
 - **Footer**: 3-column layout (branding, nav links, social icons) with copyright line
 - **Theme**: Controlled via `data-theme` attribute on `<html>` — "night" (dark, default) and "lofi" (light). Persisted in localStorage
 
-### Pages (4 total + ai-blog routes)
+### Pages (5 total + ai-blog & curiosities routes)
 - **Home** (`/`): Hero section with profile photo, CTA buttons (LinkedIn, Email, AI Research), latest AI research grid
 - **Conferences** (`/conferences`): Card grid layout for conference talks and interviews
 - **AI Blog** (`/ai-blog/`): AI-generated research with category filter pills, search, month dropdown, tag pills, pagination (6 per page)
+- **Curiosities** (`/curiosities/`): Personal-interest section. Landing hub with 10 topic tiles (build-computed post counts) + a "latest across all topics" feed; browse a topic via statically-paginated pages (6 per page, newest-first). Browse-only — no client-side search/filter in v1
 - **CV** (`/cv`): Profile, experience timeline, education, certifications, skills as badge pills
 
 ### Dynamic Routes
@@ -61,6 +65,9 @@ Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4
 - AI Blog posts: `src/pages/ai-blog/[slug].astro` (includes sources + series nav)
 - AI Blog categories: `src/pages/ai-blog/category/[category]/[...page].astro` (SEO routes)
 - AI Blog tags: `src/pages/ai-blog/tag/[tag]/[...page].astro` (SEO routes)
+- Curiosities landing hub: `src/pages/curiosities/index.astro`
+- Curiosities topic pages: `src/pages/curiosities/topic/[topic]/[...page].astro` (Astro `paginate()`, 6/page; every topic — including empty ones — resolves to a page)
+- Curiosities posts: `src/pages/curiosities/[slug].astro` (minimal post view; optional tags + series nav)
 
 ### Component System
 - **Navbar**: Top navigation replacing old sidebar. Props: `activeItemID`
@@ -77,8 +84,9 @@ Joan Esquivel's personal brand website (JoanMedia) — a modern portfolio with 4
 - Site URL configured as `https://www.joanmedia.dev`
 - Path aliases: `@components/*` and `@layouts/*` for cleaner imports
 - Sitemap auto-generated for SEO
-- **No projects, store, or blog pages** — these were removed. Do not recreate them.
+- **No projects, store, or generic blog pages** — these legacy pages were removed. Do not recreate them. (The **Curiosities** section is a separate, intentional personal-interest area — not the old blog.)
 - **AI Blog categories** configured in `src/lib/aiBlogCategories.ts` — to add a new category, add it there AND to the Zod enum in `src/content/config.ts`
+- **Curiosities components** (`src/components/Curiosity*.astro`, `src/layouts/CuriosityPostLayout.astro`) are parallel to — and independent of — the AI Blog components; changes to one must not touch the other
 
 ## Astro Best Practices
 
